@@ -1,0 +1,84 @@
+[
+    {
+        "review": "Hatten ein Wochenende in Basel verbracht und da wir auch Karten für das Musical Theater hatten verbrachten wir die Nacht im Hotel du Commerce. Wunder schöne grosse Zimmer und ein reichhaltiges Frühstück versüssten uns das tolle Wochenende in Basel.",
+        "meta": {
+            "lang": "de",
+            "title": "Schönes Erlebnis in Basel!",
+            "domain": "hotel",
+            "rating": 5,
+            "author": "Hans Heissen",
+            "gpe": "Basel",
+            "loc": "",
+            "email": "service@commercehotel.ch",
+            "phone": "+41 XXXXXXXX",
+            "url": "www.commercehotel.ch",
+            "name": "hotel-du-commerce-basel",
+            "company": "Hotel du Commerce",
+            "greetings": [
+                "Liebe*r NAMEPLACEHOLDER,",
+                "Guten Tag NAMEPLACEHOLDER,"
+            ],
+            "salutations": [
+                "Besten Dank, Hanspeter, Team Leader.",
+                "Mit freundlichen Grüssen, Hotel du Commerce."
+            ]
+        },
+        "responses": [
+            [
+                -0.015979457646608353,
+                "Vielen Dank, dass Sie unser Gast waren und sich die Zeit für diese tolle Rückmeldung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns wohl gefühlt haben und vor allem unser reichhaltiges Frühstück so richtig geniessen konnten. Wir hoffen entsprechend Sie schon bald wieder einmal bei uns zu begrüssen, sei es für ein verlängertes Wochenende oder einfach einmal zum Skifahren."
+            ],
+            [
+                -0.008342279121279716,
+                "Vielen Dank, dass Sie sich für Ihr Wochenende in Basel für unser Hotel entschieden und sich die Zeit für diese tolle Bewertung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns rundum wohl gefühlt haben und vor allem das reichhaltige Frühstück geniessen konnten. Wir hoffen entsprechend, Sie bei Ihrem nächsten Besuch in Basel wieder bei uns begrüssen zu dürfen. Wir sind übrigens jeden Tag ab dem Mittag mit durchgehend warmer Küche für Sie da."
+            ],
+            [
+                -0.014468373730778694,
+                "<GREETING> Vielen herzlichen Dank, dass Sie unser Gast waren und sich die Zeit für diese tolle Bewertung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns wohl gefühlt haben und das reichhaltige Frühstück geniessen konnten. Wir hoffen entsprechend Sie bei Ihrem nächsten Besuch in Basel wieder bei uns begrüssen zu dürfen, sei es wieder einmal zum Wandern oder auch einmal zum Skifahren. <SALUTATION>"
+            ],
+            [
+                -0.014723340049386024,
+                "<GREETING> Vielen Dank, dass Sie unser Hotel für Ihr Wochenende ausgewählt haben und sich die Zeit für diese tolle Rückmeldung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns wohl gefühlt haben und das reichhaltige Frühstück so richtig geniessen konnten. Wir freuen uns alle schon jetzt, Sie bald wieder einmal bei uns begrüssen zu dürfen, sei es wieder einmal für ein verlängertes Wochenende oder natürlich auch einmal zum Skifahren. <SALUTATION>"
+            ]
+        ]
+    },
+    {
+        "review": "Amazing <endtitle> Elana the staff member was amazing. One of the best hospitality workers we have ever encountered. Friendly, engaging and knowledgeable when it came to the food and beverages being served. We enjoyed some great swiss wine and beer with the deserts we ordered.",
+        "meta": {
+            "lang": "en",
+            "title": "Amazing",
+            "domain": "restaurant",
+            "rating": 5,
+            "author": "jenjen28",
+            "gpe": "Zurich",
+            "loc": "",
+            "email": "email@federale-so.ch",
+            "phone": "+41 XXXXXXXX",
+            "url": "www.federale.ch",
+            "name": "brasserie federale-solothurn",
+            "company": "Brasserie Fédérale",
+            "greetings": [
+                "Dear NAMEPLACEHOLDER,",
+                "Hi NAMEPLACEHOLDER,"
+            ],
+            "salutations": [
+                "Best regards, Jim.",
+                "Sincerely, your team at Brasserie Fédérale."
+            ]
+        },
+        "responses": [
+            [
+                -0.005696005187928677, "<GREETING> Thank you for your kind review. We are delighted to read you had such an amazing experience at the Doors Freestyle Grill. Our staff is constantly hard at work finding ways to exceed our guests' expectations and provide seamless service. It's great you liked the food and beverages served at our fusion steakhouse and seafood restaurant. We invite you to visit us again for lunch or dinner. By the way, we are convinced that also children should discover the diversity of Italian cuisine. In our restaurant children up to 12 years old can eat à la carte at a flat rate of 9 CHF. <SALUTATION>"
+            ],
+            [
+                -0.007242420222610235, "<GREETING> Thank you for your wonderful review. We are delighted to read you had such an amazing experience at Santa Lucia Paradeplatz. Our staff is constantly hard at work finding ways to exceed our guests' expectations and provide seamless service. It's great to know we succeeded when you visited us. It'll be a pleasure to welcome you back to our restaurant in the heart of Zurich's old town. We'll work hard once again to earn your endorsement. <SALUTATION>"
+            ],
+            [
+                -0.0049086883664131165, "<GREETING> Thank you so much for your wonderful review. It's great to hear back from you and to know you had such a good time at the Doors Freestyle Grill. Our staff is constantly hard at work finding ways to exceed our guests' expectations and provide seamless service. We are glad we succeeded when you visited us. It'll be a pleasure to welcome you back to our fusion steakhouse and seafood restaurant when you are next in Dubai. By the way, we are convinced that also children should discover the diversity of Italian cuisine. In our restaurant children up to 12 years old can eat à la carte at a flat rate of 9 CHF. <SALUTATION>"
+            ],
+            [
+                -0.008690783753991127, "<GREETING> Thank you so much for your wonderful review. It's great to hear back from you and to know you enjoyed your time at Santa Lucia Niederdorf. Our team does their best to provide every guest with a seamless experience, it's great to know we succeeded when you visited us. We invite you to visit us again for lunch or dinner. We are open every day from lunch until late at night and serve warm meals throughout the day. <SALUTATION>"
+            ]
+        ]
+    }
+]

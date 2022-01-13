@@ -1,0 +1,34 @@
+{
+    "models": {
+        "spacy_en": "./app/models/spacy/readvisor_in_domain_ner/en_core_web_md-2.3.1",
+        "spacy_de": "./app/models/spacy/readvisor_in_domain_ner/de_core_news_md-2.3.0",
+        "sentence_transformers": {
+            "xlm": "xx_paraphrase_xlm_r_multilingual_v1",
+            "dist": "xx_distiluse_base_multilingual_cased"
+        }
+    },
+    "data": {
+        "test_inputs": "./app/egs/input_210624.json",
+        "test_int_outputs": "./app/egs/intermediary_output_210624.json",
+        "test_outputs": "./app/egs/output_210512.json",
+        "company_gazetteer": "./app/models/mbart/response_generator/restaurant_hotel_gazetteer.txt",
+        "company_label_mapping": "./app/models/mbart/response_generator/re_establ_name_ids.txt"
+    },
+    "response_generator": {
+        "type": "mBART_DER",
+        "model_args": [
+            "--model_path=./app/models/mbart/response_generator/",
+            "--checkpoint=model_28.ckpt",
+            "--tokenizer=./app/models/mbart/response_generator/",
+            "--tags_included",
+            "--max_output_len=400",
+            "--max_input_len=512",
+            "--batch_size=1",
+            "--beam_size=4",
+            "--num_return_sequences=4",
+            "--do_sample",
+            "--top_k=10",
+            "--temperature=1.2"
+        ]
+    }
+}

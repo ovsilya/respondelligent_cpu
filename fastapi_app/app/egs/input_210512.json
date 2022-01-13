@@ -1,0 +1,52 @@
+[
+    {
+        "review": "Hatten ein Wochenende in Basel verbracht und da wir auch Karten für das Musical Theater hatten verbrachten wir die Nacht im Hotel du Commerce. Wunder schöne grosse Zimmer und ein reichhaltiges Frühstück versüssten uns das tolle Wochenende in Basel.",
+        "meta": {
+            "lang": "de",
+            "title": "Schönes Erlebnis in Basel!",
+            "domain": "hotel",
+            "rating": 5,
+            "author": "Hans Heissen",
+            "gpe": "Basel",
+            "loc": "",
+            "email": "service@commercehotel.ch",
+            "phone": "+41 XXXXXXXX",
+            "url": "www.commercehotel.ch",
+            "name": "hotel-du-commerce-basel",
+            "company": "Hotel du Commerce",
+            "greetings": [
+                "Liebe*r NAMEPLACEHOLDER,",
+                "Guten Tag NAMEPLACEHOLDER,"
+            ],
+            "salutations": [
+                "Besten Dank, Hanspeter, Team Leader.",
+                "Mit freundlichen Grüssen, Hotel du Commerce."
+            ]
+        }
+    },
+    {
+        "review": "Elana the staff member was amazing. One of the best hospitality workers we have ever encountered. Friendly, engaging and knowledgeable when it came to the food and beverages being served. We enjoyed some great swiss wine and beer with the deserts we ordered.",
+        "meta": {
+            "lang": "en",
+            "title": "Amazing",
+            "domain": "restaurant",
+            "rating": 5,
+            "author": "jenjen28",
+            "gpe": "Zurich",
+            "loc": "",
+            "email": "email@federale-so.ch",
+            "phone": "+41 XXXXXXXX",
+            "url": "www.federale.ch",
+            "name": "brasserie federale-solothurn",
+            "company": "Brasserie Fédérale",
+            "greetings": [
+                "Dear NAMEPLACEHOLDER,",
+                "Hi NAMEPLACEHOLDER,"
+            ],
+            "salutations": [
+                "Best regards, Jim.",
+                "Sincerely, your team at Brasserie Fédérale."
+            ]
+        }
+    }
+]

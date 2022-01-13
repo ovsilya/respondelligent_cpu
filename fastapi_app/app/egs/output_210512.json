@@ -1,0 +1,65 @@
+[
+    {
+        "review": "Hatten ein Wochenende in Basel verbracht und da wir auch Karten für das Musical Theater hatten verbrachten wir die Nacht im Hotel du Commerce. Wunder schöne grosse Zimmer und ein reichhaltiges Frühstück versüssten uns das tolle Wochenende in Basel.",
+        "meta":
+        {
+            "lang": "de",
+            "title": "Schönes Erlebnis in Basel!",
+            "domain": "hotel",
+            "rating": 5,
+            "author": "Hans Heissen",
+            "gpe": "Basel",
+            "loc": "",
+            "email": "service@commercehotel.ch",
+            "phone": "+41 XXXXXXXX",
+            "url": "www.commercehotel.ch",
+            "name": "hotel-du-commerce-basel",
+            "company": "Hotel du Commerce",
+            "greetings": [
+                "Liebe*r NAMEPLACEHOLDER,",
+                "Guten Tag NAMEPLACEHOLDER,"
+                ],
+            "salutations": [
+                "Besten Dank, Hanspeter, Team Leader.",
+                "Mit freundlichen Grüssen, Hotel du Commerce."
+                ]
+        },
+        "responses": [
+            "Guten Tag Hans Heissen, Vielen Dank, dass Sie unser Hotel für Ihr Wochenende gewählt haben und sich die Zeit für diese tolle Rückmeldung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns wohl gefühlt haben und unser reichhaltiges Frühstück geniessen konnten. Wir hoffen entsprechend Sie schon bald wieder bei uns zu begrüssen, sei es wieder für ein Wochenende in Basel oder auch einmal für ein verlängertes Wochenende in der Stadt. Mit freundlichen Grüssen, Hotel du Commerce.",
+            "Liebe*r Hans Heissen, Vielen Dank, dass Sie unser Hotel für Ihr Wochenende ausgewählt haben und sich die Zeit für ein Feedback genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns rundum wohl gefühlt haben und vor allem unser reichhaltiges Frühstück geniessen konnten. Wir hoffen Sie bei Ihrem nächsten Besuch in Basel wieder bei uns begrüssen zu dürfen. Wir sind übrigens täglich mit durchgehend warmer Küche für Sie da. Mit freundlichen Grüssen, Hotel du Commerce.",
+            "Liebe*r Hans Heissen, Vielen Dank, dass Sie unser Hotel für Ihr Wochenende ausgewählt haben und sich die Zeit für diese tolle Rückmeldung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns rundum wohl gefühlt haben und unser reichhaltiges Frühstück so richtig geniessen konnten. Wir hoffen entsprechend Sie schon bald wieder bei uns zu begrüssen, sei es wieder einmal für ein verlängertes Wochenende oder auch einmal für eine längere Auszeit vom Alltag. Mit freundlichen Grüssen, Hotel du Commerce.",
+            "Guten Tag Hans Heissen, Vielen Dank, dass Sie sich für unser Hotel entschieden haben und sich die Zeit für diese tolle Bewertung genommen haben. Wir freuen uns sehr zu hören, dass Sie sich bei uns wohl gefühlt haben und vor allem das reichhaltige Frühstück so richtig geniessen konnten. Wir hoffen entsprechend Sie bei Ihrem nächsten Aufenthalt in Basel wieder bei uns zu begrüssen. Wir sind übrigens täglich ab dem Frühstück für Sie da. Mit freundlichen Grüssen, Hotel du Commerce."
+        ]
+    },
+    {
+        "review": "Elana the staff member was amazing. One of the best hospitality workers we have ever encountered. Friendly, engaging and knowledgeable when it came to the food and beverages being served. We enjoyed some great swiss wine and beer with the deserts we ordered.",
+        "meta": {
+            "lang": "en",
+            "title": "Amazing",
+            "domain": "restaurant",
+            "rating": 5,
+            "author": "jenjen28",
+            "gpe": "Zurich",
+            "loc": "",
+            "email": "email@federale-so.ch",
+            "phone": "+41 XXXXXXXX",
+            "url": "www.federale.ch",
+            "name": "brasserie federale-solothurn",
+            "company": "Brasserie Fédérale",
+            "greetings": [
+                "Dear NAMEPLACEHOLDER,",
+                "Hi NAMEPLACEHOLDER,"
+            ], 
+            "salutations": [
+                "Best regards, Jim.",
+                "Sincerely, your team at Brasserie Fédérale."
+            ]
+        },
+        "responses": [
+            "Dear jenjen28, Thank you for your wonderful review. We are delighted to read you had such an amazing experience at the Brasserie Fédérale. Our staff members truly pride themselves in their work and are tireless in ensuring that our guests feel welcome and comfortable. It's great you liked the selection of dishes and beverages on the menu. We invite you to visit our fusion steakhouse and seafood restaurant again when you return to Zurich. By the way, we also offer a premium dining experience at home with our delivery service. Best regards, Jim.",
+            "Dear jenjen28, Thank you so much for your wonderful review. We are delighted to read you enjoyed dining at Ristorante Bindella so much. Our staff members truly pride themselves in their work and are tireless in ensuring that our guests have a pleasant and memorable experience. It's great to hear you liked the food and beverages at our Italian restaurant located in the heart of Zurich's old town. We invite you to visit us again when you return to Zurich. We'll work hard once again to earn your endorsement. Best regards, Jim.",
+            "Hi jenjen28, Thank you for your kind review. We are delighted to read you enjoyed your experience at the Brasserie Fédérale so much. Our staff is constantly hard at work finding ways to exceed our guests' expectations and make your time with us enjoyable and memorable. It's great to know we succeeded when you visited us. It'll be a pleasure to welcome you back to our fusion steakhouse and seafood restaurant in the heart of <NAME> <NAME> at Dubai Creek. By the way, we are convinced that also children should discover the diversity of cuisine. In our restaurant children up to 12 years old can eat à la carte at a flat rate of 9 CHF. Best regards, Jim.",
+        "Hi jenjen28, Thank you so much for your kind review. It's great to hear back from you and we are all happy to read, you enjoyed your time at Swiss Chuchi so much. Our team works tirelessly to provide every guest with an excellent experience, it's great to know we succeeded when you visited us. It'll be a pleasure to welcome you back to our cozy restaurant in the heart of Zurich's old town. We'll work hard once again to earn your endorsement. Sincerely, your team at Brasserie Fédérale."
+        ]
+    }
+]

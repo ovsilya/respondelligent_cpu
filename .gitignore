@@ -1,0 +1,13 @@
+# large files (to be sent separately)
+models/
+classifiers/
+models.tar.gz
+
+tmp/
+__pycache__/
+*.pyc
+Untitled.ipynb
+*/.ipynb_checkpoints/
+.ipynb_checkpoints/
+wandb/
+decode.log/
