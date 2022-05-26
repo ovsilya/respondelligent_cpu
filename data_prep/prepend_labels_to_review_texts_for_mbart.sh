@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 
-dir=$1
+dir=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart/
 
 paste -d' ' $dir/train.lang_tags $dir/train.domain $dir/train.est_label $dir/train.rating $dir/train.review > $dir/train.review_tagged
 

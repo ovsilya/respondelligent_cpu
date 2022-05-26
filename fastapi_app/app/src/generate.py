@@ -11,8 +11,8 @@ Models called 'simplify/simplification*' are simply encoder-decoder models for m
 from typing import Dict, List, Tuple
 import logging
 import torch
-from .mbart_hospo_respo.inference import *
-from .mbart_hospo_respo.train import prepare_input
+from mbart_hospo_respo.inference import *
+from mbart_hospo_respo.train import prepare_input
 from memory_profiler import profile
 
 logger = logging.getLogger(__name__)
@@ -162,20 +162,100 @@ def main(args):
     # minimal example
     inputs = [
         {
-        "review": "Hatten ein Wochenende in Basel verbracht und da wir auch Karten für das Musical Theater hatten verbrachten wir die Nacht im Hotel du Commerce. Wunder schöne grosse Zimmer und ein reichhaltiges Frühstück versüssten uns das tolle Wochenende in Basel.",
+        "review": "Great location and morning espressos were a huge plus! Bed wasn’t that comfortable and room was tiny (+) Coffee machine was amazing! (-) The size of the room was pretty small and the bed was fairly hard.,",
         "meta": {
-            "lang": "de",
-            "title": "Schönes Erlebnis in Basel!",
+            "lang": "en",
+            "title": "",
             "rating": 5,
             "domain": "hotel"}
         },
         {
-        "review": "Elana the staff member was amazing. One of the best hospitality workers we have ever encountered. Friendly, engaging and knowledgeable when it came to the food and beverages being served. We enjoyed some great swiss wine and beer with the deserts we ordered.",
+        "review": "Pleasant, well decorated hotel in central location (+) Very central location in a lively part of the city. Despite it's location it was not noisy. It's the size of hotel, that makes you forget it's a hotel, especially as the staff was very friendly. The design is modern and welcoming and the rooms was comfortable if smallish.",
         "meta": {
             "lang": "en",
-            "title": "Amazing",
+            "title": "",
+            "rating": 3,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Wenn man es nicht ruhig will... (+) Super Lage, allerdings für eine heiße Sommernacht zu laut in der Gegend. (-) Super Lage, allerdings für eine heiße Sommernacht zu laut in der Gegend.",
+        "meta": {
+            "lang": "de",
+            "title": "",
+            "rating": 3,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Nicht buchen!!! Liebe Leute. Wenn ihr dieses Hotel buchen wollt, spart euch das Geld, und geht in ein anderes Hotel. DEFINITIV NICHT ZU EMPFEHLEN. Der Schein trügt!!! 1. Steht auf der Homepage: Klimaanlage vorhanden in den Zimmern. Wir hatten 3 Doppelzimmer. 2 Davon hatten keine. Es war viel zu heiss. 2. Die Rezeption deckt sich gegenseitig wenn sie einen Fehler machen. Sie lügen euch wirklich gerade aus ins Gesicht. Wir haben extra beim Check-In nachgefragt wann das Check-out wäre. Die Dame sagte uns : ihr könnt bis 14:00 bleiben. Ganz erstaunt haben wir uns alle 3 angeschaut und nochmals nachgefragt. Wir haben es also alle 3 gehört. Beim Checkout dann die Überraschung: einen Aufpreis von 60.- pro Zimmer. Die Dame an der Rezeption sagte uns das sei ganz klar so, und überall so ausgeschrieben. Die Dame vom Check in war auch noch da und wir haben sie nochmals gefragt, und sie sagte uns: nein sie habe check in gesagt. Sie haben laut eigener Aussage auch behauptet, sie wären bei allen 3 Zimmern klopfen gekommen. Wir waren alle 3 wach...also bitte Das ist einfach eine Lüge. Die Rezeptionistin hatte auch noch die Dreistigkeit, mit uns zu reden, als müsste sie uns eines besseren belehren. Einfach nur eine. Unverschämtheit. Wir waren schon öfters in Zürich. Aber so etwas haben wir noch nicht erlebt. Naja die Holiday Check Rezessionen sprechen ebenfalls für sich. Liebe Leute, macht nicht den Gleichen Fehler wie wir und zahlt so viel Geld für solch einen Service. Einfach nur kindisch, peinlich, bemitleidenswert!",
+        "meta": {
+            "lang": "de",
+            "title": "",
+            "rating": 1,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Hervorragendes Preis-Leistungsverhältnis, super Lage, sehr modern & sauber! (+) Die Lage war sehr gut, da in Zürich alles wunderbar fußläufig erreichbar ist. Sehr gut war die kurze Entfernung zu Restaurants und zur zentralen Station der Tram. Die Zimmer entsprechen absolut den hier eingestellten Bildern der Unterkunft. (-) Irritierend war das Bild der Unterkunft einer Dachterrasse, die jedoch entgegen unserer Erwartung nicht allgemein für alle Hotelgäste zugänglich war sondern zu der Suite gehört. Dies sollte deutlicher dargestellt werden.",
+        "meta": {
+            "lang": "de",
+            "title": "",
+            "rating": 4,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Sehr gut (+) Everything else besides lack of pillows and coffee in the room (-) Pillows - too soft. Did not sleep comfortable. Extra pilows in the room would be of great help. Missed coffee in the room. We are coffee lovers so would have loved some coffee while relaxing in the room",
+        "meta": {
+            "lang": "en",
+            "title": "",
+            "rating": 3,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Hervorragend (+) Clean and quiet",
+        "meta": {
+            "lang": "en",
+            "title": "",
+            "rating": 4,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Nice clean boutique hotel a short walk from the train station and all spots in Zurich. (+) Nice hotel a 10 minute walk from the Zurich main train station and close to lots of bars/restaurants. Rooms are cozy for 2 people but they also have a loft that is very large and gives you roof access.",
+        "meta": {
+            "lang": "en",
+            "title": "",
+            "rating": 4,
+            "domain": "hotel"}
+        },
+            {
+        "review": "TOP Hotel und freundliche Mitarbeiter:innen",
+        "meta": {
+            "lang": "de",
+            "title": "",
             "rating": 5,
-            "domain": "restaurant"}
+            "domain": "hotel"}
+        },
+        {
+        "review": "Sehr gut (+) Zentrale Lage. Modern und Sauber. (-) Das erste Zimmer hatte einen unangenehmen Geruch. Es wurde aber ohne Stress ein anderes Zimmer bereitgestellt, bei dem war alles in Ordnung. Zu teuer für die Zimmerkategorie.",
+        "meta": {
+            "lang": "de",
+            "title": "",
+            "rating": 3,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Service fehl am Platz... Bin seit etlichen Jahren spontaner Gast beim Sternengrill, denn die Wurst (mit dem Bürli und scharfen Senf) ist und bleibt einfach lecker. Standort ideal. Preis ok. Aber von Service kann hier gar nicht die Rede sein. Dies möchte ich hier klar festhalten. War heute seit langem wieder dort: Lang gezogenes Gesicht beim Personal am Grill - Ich bestelle die Spezialwurst mit Sauerkraut - die Augen werden verdreht \"keine Wurst, 15 Minuten\" in gebrochenem Deutsch. - ok dann halt eine normale Bratwurst, kein Problem. Das Geld wird kommentarlos eingesackt. Blick seitwärts. Man fühlt sich fast schon schuldig das Personal so sehr belastet zu haben.Bei jeder Dönerbude wird man feundlicher bedient. Von aussen währen dem verspeisen der Wurst, habe ich dann das Personal etwas weiter beobachtet: bei gewissen weiblichen Gästen war die Bedienung etwas positiver eingestellt - der abschliessende Blick auf den Hintern des Gastes - nun ja, dies kann man auf dem Bau erwarten... @Felix Zehnder: hast Du mal noch Zeit für einen Brief?Anyway, ein klein wenig anständiger Umgang mit den Gästen würde nicht schaden...",
+        "meta": {
+            "lang": "de",
+            "title": "",
+            "rating": 2,
+            "domain": "hotel"}
+        },
+        {
+        "review": "Great location and morning espressos were a huge plus! Bed wasn’t that comfortable and room was tiny (+) Coffee machine was amazing! (-) The size of the room was pretty small and the bed was fairly hard.",
+        "meta": {
+            "lang": "en",
+            "title": "",
+            "rating": 3,
+            "domain": "hotel"}
         },
     ]
 

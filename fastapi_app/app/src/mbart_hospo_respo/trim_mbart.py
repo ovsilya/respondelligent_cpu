@@ -58,7 +58,8 @@ def trim_embedding_matrix_of_pretrained_model(
     ## embedding matrix is model.shared.weight:torch.Size([250027, 1024])
     original_embed_weight = model.model.shared.weight
     original_vocab_size, model_size = original_embed_weight.shape
-    
+    print("original_vocab_size",original_vocab_size)
+    print("model_size",model_size)
     # trim embed matrix
     if reduce_to_vocab is not None:
         with open(reduce_to_vocab, 'r') as f:
@@ -68,10 +69,11 @@ def trim_embedding_matrix_of_pretrained_model(
                 if tokenizer.sp_model.piece_to_id(piece.rstrip()) > 0:
                     keep_pieces[piece.rstrip()] = 1
                     #print(piece)
-                #print(keep_pieces)
+            print("len keep_pieces:",len(keep_pieces))
 
             num_special_tokens = 4 # <unk>, <s>, </s> <pad>
             new_vocab_size = len(keep_pieces) + num_special_tokens + len(tokenizer.lang_code_to_id) + tokenizer.fairseq_offset + 1 # for mask token
+            print("new_vocab_size",new_vocab_size)
             new_embed_weight = model.model.shared.weight.new_empty(new_vocab_size, model_size)
             ## need to reduce final_logits_bias too
             final_logits_bias_original = model.final_logits_bias.transpose(0,1) # (1, vocab_size)
@@ -81,12 +83,15 @@ def trim_embedding_matrix_of_pretrained_model(
             # `added_vocab_length` = length of special
             # mabrt's specual tokens used (27)
             added_vocab_length = len(tokenizer.lang_code_to_id) + tokenizer.fairseq_offset + 1
+            print("added_vocab_length",added_vocab_length)
             base_vocab_length_original = original_vocab_size - added_vocab_length
+            print("base_vocab_length_original",base_vocab_length_original)
             base_vocab_length_new = len(keep_pieces) + num_special_tokens
+            print("base_vocab_length_new",base_vocab_length_new)
 
             ## delete ununsed entries from sentencepiece model of the tokenizer and save the new ModelProto
             pb2_model = pb2.ModelProto()
-            pb2_model.ParseFromString(open(os.path.join(cache_dir, "sentencepiece.bpe.model"), 'rb').read())
+            pb2_model.ParseFromString(open(os.path.join(cache_dir, "sentencepiece.bpe-2.model"), 'rb').read())
             indices_to_remove = []
             count=0
 
@@ -104,7 +109,7 @@ def trim_embedding_matrix_of_pretrained_model(
                 if new_embed_iter > base_vocab_length_new:
                     print("ran out of space at position {} in new matrix with vocab size {}".format(j, base_vocab_length_new))
                     exit(0)
-
+                #print(spm_iter)
                 piece = pb2_model.pieces[spm_iter].piece
                 #print("embed iter: {}, spm iter {}, piece {}".format(embed_iter, spm_iter, piece))
                 if piece in keep_pieces.keys():

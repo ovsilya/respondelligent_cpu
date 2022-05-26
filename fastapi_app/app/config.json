@@ -8,8 +8,8 @@
         }
     },
     "data": {
-        "test_inputs": "./app/egs/input_210624.json",
-        "test_int_outputs": "./app/egs/intermediary_output_210624.json",
+        "test_inputs": "./app/egs/input_210512.json",
+        "test_int_outputs": "./app/egs/intermediary_output_210512.json",
         "test_outputs": "./app/egs/output_210512.json",
         "company_gazetteer": "./app/models/mbart/response_generator/restaurant_hotel_gazetteer.txt",
         "company_label_mapping": "./app/models/mbart/response_generator/re_establ_name_ids.txt"

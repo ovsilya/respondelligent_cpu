@@ -10,8 +10,8 @@
 
 set -e
 
-scratch=/srv/scratch6/kew/mbart/
-data=$scratch/hospo_respo/respo_final/2021_06/data
+scratch=/home/ovsyannikovilyavl/respondelligent/rg/fastapi_app/app/models/mbart/response_generator
+data=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart
 
 spm_pieces="$data/spm_pieces.txt"
 spec_tokens="$data/special_tokens.txt"
@@ -20,7 +20,7 @@ spec_tokens="$data/special_tokens.txt"
 python collect_list_of_spm_pieces.py \
     $data/train.review $data/train.response \
     $data/valid.review $data/valid.response \
-    --spm $scratch/hf4mbart/sentencepiece.bpe.model \
+    --spm $scratch/sentencepiece.bpe-2.model \
     --outfile $spm_pieces
 
 echo "saved spm pieces to $spm_pieces"
@@ -38,7 +38,7 @@ timestamp() {
 }
 
 save_pref="mbart_model_$(timestamp)"
-outdir=$data/../$save_pref/
+outdir=$data/$save_pref/
 echo "output path for trimmed mBART model: $outdir"
 
 echo "trimming mBART's embedding matrix..."
@@ -47,7 +47,7 @@ python trim_mbart.py \
     --base_model facebook/mbart-large-cc25 \
     --save_model_to $outdir \
     --reduce-to-vocab $spm_pieces \
-    --cache_dir $scratch/hf4mbart \
+    --cache_dir $scratch \
     --add_special_tokens $spec_tokens
 
 echo "done!"

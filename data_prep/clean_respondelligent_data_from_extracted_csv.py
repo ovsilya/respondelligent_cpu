@@ -51,10 +51,10 @@ warnings.filterwarnings('ignore')
 inpath = Path(sys.argv[1]) # e.g. /mnt/storage/clfiles/projects/readvisor/respondelligent/2021_01/exported_from_mysql
 output_file = sys.argv[2] # e.g. /mnt/storage/clwork/projects/readvisor/RESPONSE_GENERATION/intermediary/respondelligent_2021_01.pkl
 
-review_csv = inpath / 'reviews.raw_export.csv' # 'reviews.raw_export.csv'
-response_csv = inpath / 'reviewanswers.raw_export.csv' #'reviewanswers.raw_export.csv'
+review_csv = inpath / 'reviews.raw_export_2022.csv' # 'reviews.raw_export.csv'
+response_csv = inpath / 'reviewanswers.raw_export_2022.csv' #'reviewanswers.raw_export.csv'
 
-additional_info = inpath / 'sf_guard_rechannel_merged_cleaned.csv'
+additional_info = inpath / 'sf_guard_rechannel_merged_cleaned_2022.csv'
 
 # Prevent overwiting existing data!
 if Path(output_file).exists():
@@ -180,11 +180,10 @@ def special_deduplication(df):
 
 if __name__ == "__main__":
 
-    review_df = pd.read_csv(review_csv, sep=';', header=0, index_col=False, names=list(resp_tools.review_dtypes.keys()), dtype=resp_tools.review_dtypes, parse_dates=resp_tools.review_dates)
-    response_df = pd.read_csv(response_csv, sep=';', header=0, index_col=False, names=list(resp_tools.answer_dtypes.keys()), dtype=resp_tools.answer_dtypes, parse_dates=resp_tools.answer_dates)
-
+    review_df = pd.read_csv(review_csv, sep=';', header=0, index_col=False, names=list(resp_tools.review_dtypes.keys()), dtype=resp_tools.review_dtypes, parse_dates=resp_tools.review_dates,error_bad_lines=False,engine='c')
+    response_df = pd.read_csv(response_csv, sep=';', header=0, index_col=False, names=list(resp_tools.answer_dtypes.keys()), dtype=resp_tools.answer_dtypes, parse_dates=resp_tools.answer_dates,error_bad_lines=False,engine='c')
     info_df = pd.read_csv(additional_info, sep=';', header=0, index_col=0)
-
+    
     # breakpoint()
 
     ### backward compatibility for getting date-specific entries

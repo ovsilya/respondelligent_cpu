@@ -10,14 +10,14 @@
 
 set -e
 
-GPU=$1
+GPU=$0
 scratch=/srv/scratch6/kew/mbart/hospo_respo/respo_final/
 
 # data=$scratch/data/ # regular test set (2020)
-data=$scratch/2021_06/data
-finetuned=$scratch/2021_06/mbart_model_2021-06-18/ft/2021-06-20_14-52-42
-model_checkpoint=$finetuned/model_28.ckpt
-outdir=$finetuned/inference/
+data=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart
+finetuned=/home/ovsyannikovilyavl/respondelligent/rg/fastapi_app/app/models/mbart/response_generator
+model_checkpoint=model_28.ckpt
+outdir=$data/inference/
 outfile=$outdir/translations_28.json
 
 SRC="review_tagged"

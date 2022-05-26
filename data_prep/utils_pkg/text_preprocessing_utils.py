@@ -8,8 +8,8 @@ import spacy
 
 # load spacy model
 
-en = '/srv/scratch2/kew/spacy_models/en_core_web_sm-2.3.1/en_core_web_sm/en_core_web_sm-2.3.1'
-de = '/srv/scratch2/kew/spacy_models/de_core_news_sm-2.3.0/de_core_news_sm/de_core_news_sm-2.3.0'
+en = '/home/ovsyannikovilyavl/respondelligent/rg/data_prep/models/spacy/readvisor_in_domain_ner/en_core_web_md-2.3.1'
+de = '/home/ovsyannikovilyavl/respondelligent/rg/data_prep/models/spacy/readvisor_in_domain_ner/de_core_news_md-2.3.0'
 
 try:
     EN_NLP = spacy.load(en)

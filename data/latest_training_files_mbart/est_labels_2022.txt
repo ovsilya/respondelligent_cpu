@@ -1,0 +1,126 @@
+swiss-chuchi-zuerich	2160	<swiss-chuchi-zuerich>	<est_1>
+doors-freestyle-grill-dubai	1237	<doors-freestyle-grill-dubai>	<est_2>
+sternen-grill-zuerich	1027	<sternen-grill-zuerich>	<est_3>
+leoneck-swiss-hotel-zurich	980	<leoneck-swiss-hotel-zurich>	<est_4>
+santa-lucia niederdorf-zuerich	772	<santa-lucia_niederdorf-zuerich>	<est_5>
+odeon-zuerich	748	<odeon-zuerich>	<est_6>
+cantinetta-antinori-zurich	690	<cantinetta-antinori-zurich>	<est_7>
+piu-europaallee-zuerich	672	<piu-europaallee-zuerich>	<est_8>
+terrasse-zuerich	602	<terrasse-zuerich>	<est_9>
+bank-zuerich	590	<bank-zuerich>	<est_10>
+piu-schiffbau-zuerich	565	<piu-schiffbau-zuerich>	<est_11>
+kornhauskeller-bern	561	<kornhauskeller-bern>	<est_12>
+zunfthaus-zur-waag-zuerich	547	<zunfthaus-zur-waag-zuerich>	<est_13>
+hotel-adler-zuerich	542	<hotel-adler-zuerich>	<est_14>
+santa-lucia paradeplatz-zuerich	535	<santa-lucia_paradeplatz-zuerich>	<est_15>
+walhalla-guest-house-zuerich	514	<walhalla-guest-house-zuerich>	<est_16>
+hotel nidwaldnerhof-beckenried	512	<hotel_nidwaldnerhof-beckenried>	<est_17>
+national-winterthur	466	<national-winterthur>	<est_18>
+hotel-walhalla-zuerich	457	<hotel-walhalla-zuerich>	<est_19>
+spaghetti-factory-rosenhof-zuerich	440	<spaghetti-factory-rosenhof-zuerich>	<est_20>
+the-flag-zuerich	426	<the-flag-zuerich>	<est_21>
+kosmos-zuerich	414	<kosmos-zuerich>	<est_22>
+santa-lucia winterthur-winterthur	403	<santa-lucia_winterthur-winterthur>	<est_23>
+ristorante-bindella-zuerich	401	<ristorante-bindella-zuerich>	<est_24>
+santa-lucia corso-zuerich	380	<santa-lucia_corso-zuerich>	<est_25>
+santa-lucia-schaffhausen	361	<santa-lucia-schaffhausen>	<est_26>
+santa-lucia oerlikon-zuerich	342	<santa-lucia_oerlikon-zuerich>	<est_27>
+santa-lucia baden-baden	340	<santa-lucia_baden-baden>	<est_28>
+spaghetti-factory-chindlifraesser-bern	335	<spaghetti-factory-chindlifraesser-bern>	<est_29>
+lorenzini-ristorante-bern	334	<lorenzini-ristorante-bern>	<est_30>
+bianchi-zuerich	333	<bianchi-zuerich>	<est_31>
+santa-lucia altstetten-zuerich	323	<santa-lucia_altstetten-zuerich>	<est_32>
+hotel-opera-zuerich	315	<hotel-opera-zuerich>	<est_33>
+chesa-rosatsch-7505-celerina	310	<chesa-rosatsch-7505-celerina>	<est_34>
+barbatti-luzern	305	<barbatti-luzern>	<est_35>
+latini-basel	300	<latini-basel>	<est_36>
+santa lucia bern-bern	298	<santa_lucia_bern-bern>	<est_37>
+cantinetta-bindella-solothurn	283	<cantinetta-bindella-solothurn>	<est_38>
+ristorante-waisenhaus-thun	274	<ristorante-waisenhaus-thun>	<est_39>
+rosalys-zuerich	254	<rosalys-zuerich>	<est_40>
+hotel-felix-zürich	253	<hotel-felix-zürich>	<est_41>
+amalfi-zuerich	237	<amalfi-zuerich>	<est_42>
+brasserie federale-solothurn	237	<brasserie_federale-solothurn>	<est_43>
+mcdonalds-restaurant-luzern	222	<mcdonalds-restaurant-luzern>	<est_44>
+cantinetta-bindella-winterthur	217	<cantinetta-bindella-winterthur>	<est_45>
+ristorante lungomare-olten	206	<ristorante_lungomare-olten>	<est_46>
+santa-lucia wiedikon-zuerich	204	<santa-lucia_wiedikon-zuerich>	<est_47>
+vallocaia-zuerich	204	<vallocaia-zuerich>	<est_48>
+baeren-by-schefer-einsiedeln	202	<baeren-by-schefer-einsiedeln>	<est_49>
+verdi-bern	201	<verdi-bern>	<est_50>
+ornellaia-zuerich	200	<ornellaia-zuerich>	<est_51>
+hotel-drei-könige-einsiedeln	199	<hotel-drei-könige-einsiedeln>	<est_52>
+santa-lucia-teatro-zuerich	193	<santa-lucia-teatro-zuerich>	<est_53>
+masi-wine-bar-zuerich	192	<masi-wine-bar-zuerich>	<est_54>
+santa-lucia limmatplatz-zuerich	192	<santa-lucia_limmatplatz-zuerich>	<est_55>
+conti-zuerich	175	<conti-zuerich>	<est_56>
+gifthuettli-basel	166	<gifthuettli-basel>	<est_57>
+kornhaus-galerie-bar-und-lounge-bern	163	<kornhaus-galerie-bar-und-lounge-bern>	<est_58>
+belcafe-zuerich	161	<belcafe-zuerich>	<est_59>
+hotel-du-commerce-basel	160	<hotel-du-commerce-basel>	<est_60>
+mcdonalds-restaurant-hinwil	157	<mcdonalds-restaurant-hinwil>	<est_61>
+mcdonalds-restaurant-luzern-1	150	<mcdonalds-restaurant-luzern-1>	<est_62>
+seehotel-hermitage-luzern	135	<seehotel-hermitage-luzern>	<est_63>
+labstelle-wien	134	<labstelle-wien>	<est_64>
+mcdonalds-restaurant-seewen	132	<mcdonalds-restaurant-seewen>	<est_65>
+mcdonalds-restaurant-baar	131	<mcdonalds-restaurant-baar>	<est_66>
+mcdonalds-restaurant-sihlbrugg	131	<mcdonalds-restaurant-sihlbrugg>	<est_67>
+trattoria-sempre-zürich	130	<trattoria-sempre-zürich>	<est_68>
+hotel-sternen-unterwasser	128	<hotel-sternen-unterwasser>	<est_69>
+landgasthof-riehen-riehen	127	<landgasthof-riehen-riehen>	<est_70>
+piu-kornhaus-bern	122	<piu-kornhaus-bern>	<est_71>
+hotel-stockalperhof-brig	120	<hotel-stockalperhof-brig>	<est_72>
+berggasthaus-mostelberg-sattel	117	<berggasthaus-mostelberg-sattel>	<est_73>
+mcdonalds-restaurant-affoltern-am-albis	114	<mcdonalds-restaurant-affoltern-am-albis>	<est_74>
+mcdonalds-restaurant-volketswil	113	<mcdonalds-restaurant-volketswil>	<est_75>
+pizzeria-ramazzoti-basel	111	<pizzeria-ramazzoti-basel>	<est_76>
+hotel-kloster-dornach-dornach	110	<hotel-kloster-dornach-dornach>	<est_77>
+egge14-solothurn	104	<egge14-solothurn>	<est_78>
+hotel-roessli-zürich	103	<hotel-roessli-zürich>	<est_79>
+restaurant-schuetzenhaus-basel	99	<restaurant-schuetzenhaus-basel>	<est_80>
+gerberstube-schaffhausen	98	<gerberstube-schaffhausen>	<est_81>
+noohn-basel	92	<noohn-basel>	<est_82>
+schloss-bottmingen-bottmingen	91	<schloss-bottmingen-bottmingen>	<est_83>
+hotel-city-zuerich	87	<hotel-city-zuerich>	<est_84>
+hotel-piz-buin-klosters	84	<hotel-piz-buin-klosters>	<est_85>
+spaghetti-factory-salmen-aarau	80	<spaghetti-factory-salmen-aarau>	<est_86>
+mcdonalds-restaurant-waedenswil	78	<mcdonalds-restaurant-waedenswil>	<est_87>
+mcdonalds-restaurant-glarus	77	<mcdonalds-restaurant-glarus>	<est_88>
+stuevas-rosatsch-celerina	76	<stuevas-rosatsch-celerina>	<est_89>
+uondas-celerina	74	<uondas-celerina>	<est_90>
+mcdonalds-restaurant-rapperswil	74	<mcdonalds-restaurant-rapperswil>	<est_91>
+mcdonalds-restaurant-my-stop	68	<mcdonalds-restaurant-my-stop>	<est_92>
+hotel-ambassador-zuerich	65	<hotel-ambassador-zuerich>	<est_93>
+hotel-seehof-zürich	62	<hotel-seehof-zürich>	<est_94>
+villa-merian-basel	62	<villa-merian-basel>	<est_95>
+hotel-sport-klosters	62	<hotel-sport-klosters>	<est_96>
+ristorante- bindella-fribourg	60	<ristorante-_bindella-fribourg>	<est_97>
+the-5-zürich	59	<the-5-zürich>	<est_98>
+restaurant-schloss-seeburg-kreuzlingen	58	<restaurant-schloss-seeburg-kreuzlingen>	<est_99>
+mcdonalds-restaurant-uster	50	<mcdonalds-restaurant-uster>	<est_100>
+cervo-mountain-resort-zermatt	48	<cervo-mountain-resort-zermatt>	<est_101>
+nomad-by-cervo-zermatt	46	<nomad-by-cervo-zermatt>	<est_102>
+restaurant-hermitage-luzern	41	<restaurant-hermitage-luzern>	<est_103>
+heimatli-celerina	36	<heimatli-celerina>	<est_104>
+chez-donati-basel	35	<chez-donati-basel>	<est_105>
+restaurant-thunersee-gwatt	33	<restaurant-thunersee-gwatt>	<est_106>
+wystube isebaehnli-zuerich	33	<wystube_isebaehnli-zuerich>	<est_107>
+pier11-solothurn	30	<pier11-solothurn>	<est_108>
+seerestaurant-hotel-nidwaldnerhof-beckenried	28	<seerestaurant-hotel-nidwaldnerhof-beckenried>	<est_109>
+restaurant-opera-zuerich	27	<restaurant-opera-zuerich>	<est_110>
+kosmos-event-zuerich	23	<kosmos-event-zuerich>	<est_111>
+villa-antinori-da-bindella-kloten	22	<villa-antinori-da-bindella-kloten>	<est_112>
+mosers-baden	20	<mosers-baden>	<est_113>
+ferdinand-by-cervo-zermatt	18	<ferdinand-by-cervo-zermatt>	<est_114>
+wirtshaus-sankt-jakob-basel	16	<wirtshaus-sankt-jakob-basel>	<est_115>
+bazaar-zermatt	13	<bazaar-zermatt>	<est_116>
+madre-nostra-by-cervo-zermatt	12	<madre-nostra-by-cervo-zermatt>	<est_117>
+sternen-grill flughafen-zuerich-kloten	12	<sternen-grill_flughafen-zuerich-kloten>	<est_118>
+zum-goldenen-sternen-basel	12	<zum-goldenen-sternen-basel>	<est_119>
+seebistro-thunersee-gwatt	11	<seebistro-thunersee-gwatt>	<est_120>
+hostel-riverlodge-	11	<hostel-riverlodge->	<est_121>
+santa-lucia-lieferservice-zürich	8	<santa-lucia-lieferservice-zürich>	<est_122>
+santa-lucia-subito-zürich	7	<santa-lucia-subito-zürich>	<est_123>
+sternen-grill oerlikon-zuerich	6	<sternen-grill_oerlikon-zuerich>	<est_124>
+harrys-cafe-de-wheels-woolloomooloo	4	<harrys-cafe-de-wheels-woolloomooloo>	<est_125>
+overlook-lodge-zermatt	4	<overlook-lodge-zermatt>	<est_126>

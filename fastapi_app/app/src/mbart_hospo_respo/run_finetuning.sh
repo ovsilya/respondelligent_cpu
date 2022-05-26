@@ -11,10 +11,10 @@
 set -e
 
 GPU=$1
-scratch=/srv/scratch6/kew/mbart/hospo_respo/respo_final/
-pretrained=$scratch/2021_06/mbart_model_2021-06-18/
-data=$scratch/2021_06/data
-outdir=$pretrained/ft/
+scratch==/home/ovsyannikovilyavl/respondelligent/rg/fastapi_app/app/models/mbart/response_generator
+data=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart/
+pretrained=$data/mbart_model_2022-02-18/
+outdir=$data/ft/
 
 ## params
 SRC=review_tagged
@@ -22,9 +22,9 @@ TGT=response_tagged
 MAX_SRC_LEN=512
 MAX_TGT_LEN=512
 
-if [[ -z $GPU ]]; then
-  echo "No GPU specified!" && exit 1
-fi
+#if [[ -z $GPU ]]; then
+#  echo "No GPU specified!" && exit 1
+#fi
 
 export CUDA_VISIBLE_DEVICES=$GPU
 
@@ -35,7 +35,7 @@ timestamp() {
 save_pref="$(timestamp)"
 echo "Fine-tuning output dir: $outdir/$save_pref"
 
-echo "Running on GPU(s) $GPU"
+#echo "Running on GPU(s) $GPU"
 
 set -x # to log experiment execution
 
