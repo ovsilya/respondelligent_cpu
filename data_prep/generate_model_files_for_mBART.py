@@ -21,10 +21,7 @@ import json
 from sklearn.preprocessing import MinMaxScaler
 
 from utils_pkg import multiprocessing_utils as mp
-from utils_pkg import sentiment_utils as svec
-from utils_pkg.greetings_flair import mask_greetings_and_salutations_in_spacy_doc, mask_greetings_and_salutations
-from utils_pkg.mask_entities_in_df_texts import mask_entity_tokens
-from utils_pkg.spacy_utils import add_special_tokens_to_tokenizer
+from utils_pkg.greetings_flair import mask_greetings_and_salutations_in_spacy_doc
 
 pd.options.display.max_columns = 999
 
