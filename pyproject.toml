@@ -1,0 +1,94 @@
+# ReAdvisor — mBART review-response generation (re:spondelligent).
+#
+# NOTE ON VERSIONS: this project targets the original 2021 stack on purpose
+# (torch 1.6, PyTorch-Lightning 1.1.6, transformers trim_mbart fork, spaCy 2.3,
+# Pydantic 1.7, FastAPI 0.63). The refactor modernizes *code and structure only* —
+# frameworks and pins are intentionally unchanged. Python is pinned to 3.8 to match.
+#
+# The dependency split below was derived from static import analysis and should be
+# validated against a real install. Two entries from the old requirements.txt are
+# intentionally dropped: `dataclasses==0.6` (a pre-3.7 backport that conflicts with
+# the stdlib on 3.8+) and `memory-profiler` (the leftover @profile decorators were removed).
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "readvisor"
+version = "1.0.0"
+description = "mBART-based hospitality review-response generation (re:spondelligent / ReAdvisor)."
+readme = "README.md"
+requires-python = "==3.8.*"
+license = { text = "MIT" }
+
+# Serving runtime — what the FastAPI app actually imports at request time.
+dependencies = [
+    "fastapi==0.63.0",
+    "uvicorn==0.13.4",
+    "pydantic==1.7.2",
+    "torch==1.6.0",
+    "pytorch-lightning==1.1.6",
+    "transformers @ git+https://github.com/ZurichNLP/transformers.git@trim_mbart#egg=transformers",
+    "datasets==1.2.1",
+    "spacy==2.3.2",
+    "spacy-sentence-bert==0.0.4",
+    "sentencepiece==0.1.95",
+    "sacremoses==0.0.35",
+    "sacrebleu==1.4.14",
+    "rouge_score",
+    "numpy==1.19.5",
+]
+
+[project.optional-dependencies]
+# Data preparation + model fine-tuning pipeline.
+train = [
+    "pandas==1.1.1",
+    "scikit-learn==0.23.2",
+    "scipy==1.5.2",
+    "flair",
+    "fasttext==0.9.2",
+    "nltk==3.5",
+    "langdetect==1.0.8",
+    "langid==1.1.6",
+    "beautifulsoup4==4.9.3",
+    "sentence-transformers",
+    "subword-nmt==0.3.7",
+    "gensim==3.8.3",
+    "emoji==1.2.0",
+    "sqlitedict==1.7.0",
+    "spacy-conll==2.0.0",
+    "srsly==1.0.2",
+    "tqdm==4.49.0",
+    "requests==2.24.0",
+    "omegaconf==2.0.5",
+    "wandb==0.10.31",
+    "tensorboardX",
+    "test-tube==0.7.5",
+    "vizseq @ git+https://github.com/tannonk/vizseq#egg=vizseq",
+]
+# Notebooks, plotting, linting, tests.
+dev = [
+    "jupyterlab==2.2.8",
+    "matplotlib==3.3.1",
+    "seaborn==0.11.0",
+    "ruff",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["readvisor*"]
+
+[tool.ruff]
+target-version = "py38"
+line-length = 100
+
+[tool.ruff.lint]
+# E/F = pyflakes+pycodestyle, I = import sorting, B = bugbear, UP = pyupgrade.
+select = ["E", "F", "I", "B", "UP"]
+# Long lines are pervasive in the legacy code; fix opportunistically, don't gate on them.
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
