@@ -1,14 +1,10 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 
-# import spacy
-# import matplotlib as mlp
-# from spacy_langdetect import LanguageDetector
-import re
-# import os
-import pandas as pd
-import copy
-from tqdm.notebook import tqdm
+"""Static configuration for the re:spondelligent data-prep pipeline.
+
+Holds the group-id sets and the column dtype/date-parsing specifications used when
+reading the raw re:spondelligent DB exports into pandas DataFrames.
+"""
 
 # updated April 22, 2020
 rst_grpids = {515, 516, 517, 518, 519, 8, 520, 10, 522, 14, 526, 16, 527, 18, 528, 534, 23, 537, 538, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 95, 98, 102, 106, 107, 108, 111, 112, 128, 129, 130, 131, 132, 139, 140, 141, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 165, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 188, 189, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 216, 217, 218, 221, 224, 225, 233, 234, 235, 236, 237, 249, 250, 251,
@@ -97,7 +93,3 @@ answer_dtypes = {
 }
 
 answer_dates = ["answerdate", "created_at", "updated_at"]
-
-
-if __name__ == "__main__":
-    pass

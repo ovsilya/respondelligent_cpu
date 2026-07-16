@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
+"""Text-cleaning helpers: HTML stripping, translation-marker removal, language ID."""
 
 import re
+from typing import List, Optional
+
 from bs4 import BeautifulSoup  # for cleaning HTML
-# import langid # language identification
 from langdetect import detect
 
-def reverse_tokenization(tokens, spaces):
-    """
-    takes a list of tokens and a list of boolean values
-    indicating whether the corresponding token has a
-    floowing whitespace.
+
+def reverse_tokenization(tokens: List[str], spaces: List[bool]) -> str:
+    """Reconstruct a string from tokens and their trailing-whitespace flags.
+
+    Args:
+        tokens: A list of tokens.
+        spaces: A list of boolean values indicating whether the corresponding
+            token has a following whitespace.
+
+    Returns:
+        The detokenized string.
     """
     assert len(tokens) == len(spaces)
     detokenized = ''
@@ -21,18 +29,21 @@ def reverse_tokenization(tokens, spaces):
             detokenized += token
     return detokenized.strip()
 
-def assign_lang(text):
+
+def assign_lang(text: Optional[str]) -> Optional[str]:
+    """Detect the language of ``text``, returning ``None`` on empty/undetectable input."""
     if not text:
         return None
     else:
         try:
             lang = detect(text)
             return lang
-        except:
-            return None 
-        
-def clean_translations(text):
+        except Exception:
+            return None
 
+
+def clean_translations(text: Optional[str]) -> Optional[str]:
+    """Strip Google-translation markers, keeping the original-language portion."""
     if not text:
         return None
     else:
@@ -52,10 +63,8 @@ def clean_translations(text):
             return text.strip()
 
 
-def clean_html(text):
-    """
-    Does some simple text clean-up steps, e.g. normalising whitespace, removing common HTML tags
-    """
+def clean_html(text: Optional[str]) -> Optional[str]:
+    """Strip HTML markup and normalise whitespace in ``text``."""
     if not text:
         return None
     else:
@@ -70,6 +79,3 @@ def clean_html(text):
         text = re.sub(r'[\s\t\n\r]+', ' ', text)
 
         return text.strip()
-
-if __name__ == "__main__":
-    pass

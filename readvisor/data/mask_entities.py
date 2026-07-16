@@ -1,51 +1,57 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-"""
+"""Mask named entities (persons, locations, URLs, emails, ...) in DataFrame texts.
+
 Date: March 2021
 
 Example call:
 
-    python mask_entities_in_df_texts.py --input /mnt/storage/clwork/projects/readvisor/RESPONSE_GENERATION/intermediary/de_rrgen.pkl --spacy_model /srv/scratch2/kew/spacy_models/readvisor_in_domain_ner/de_core_news_md-2.3.0 --n_cores 52 --tokenized
-
+    python -m readvisor.data.mask_entities --input /mnt/storage/clwork/projects/readvisor/RESPONSE_GENERATION/intermediary/de_rrgen.pkl --spacy_model /srv/scratch2/kew/spacy_models/readvisor_in_domain_ner/de_core_news_md-2.3.0 --n_cores 52 --tokenized
 """
 
 import argparse
-import spacy
-import pandas as pd
-from tqdm import tqdm
-from joblib import Parallel, delayed
+import logging
+from typing import List, Optional
+
 import numpy as np
+import pandas as pd
+import spacy
+from joblib import Parallel, delayed
 
-from .spacy_utils import WhitespaceTokenizer, add_special_tokens_to_tokenizer
-from .text_cleaning_utils import reverse_tokenization
+from readvisor.data.text_cleaning import reverse_tokenization
+from readvisor.utils.spacy_utils import (
+    WhitespaceTokenizer,
+    add_special_tokens_to_tokenizer,
+)
 
-import pdb
+logger = logging.getLogger(__name__)
 
 
-def set_args():
+def set_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument('--input', required=True, type=str, help='dataframe for processing')
     ap.add_argument('--output', required=False, type=str, help='path to save output dataframe, if not given, updates input file in place')
-    ap.add_argument('--spacy_model', required=True, type=str, help='shortcut or full path to spacy model, e.g. custom model such as /srv/scratch2/kew/spacy_models/readvisor_in_domain_ner/de_core_news_md...')    
+    ap.add_argument('--spacy_model', required=True, type=str, help='shortcut or full path to spacy model, e.g. custom model such as /srv/scratch2/kew/spacy_models/readvisor_in_domain_ner/de_core_news_md...')
     ap.add_argument('--n_cores', required=False, type=int, default=12, help='number of cores to use for parallel processing')
     ap.add_argument('--tokenized', default=False, action='store_true', help='set if input text is pretokenized. This is expected after running alphasystems sentiment analysis.')
     ap.add_argument('--columns', nargs='*', required=False, help='names of df columns to apply preprocessing to, e.g. `review_clean` `response_clean`.')
     return ap.parse_args()
 
 
-def mask_entity_tokens(doc, authors=[], detokenize=False):
-    """
-    Applies entity masking to tokenised texts for the purpose of review response generation experiments
+def mask_entity_tokens(doc, authors: Optional[List[str]] = None, detokenize: bool = False) -> str:
+    """Apply entity masking to tokenised texts for review-response generation.
 
     Args:
-        doc: spacy doc object
-        authors (list): author names associated with text (e.g. username)
+        doc: spaCy doc object.
+        authors: Author names associated with the text (e.g. username).
+        detokenize: If True, return a detokenized string; otherwise join on spaces.
 
     Returns:
-        tokenized text string with masks
+        Tokenized text string with masks.
     """
-    
+    if authors is None:
+        authors = []
+
     message = []
     spaces = []
 
@@ -76,12 +82,12 @@ def mask_entity_tokens(doc, authors=[], detokenize=False):
         elif tok.like_email:
             message.append('<EMAIL>')
 
-        elif authors and tok.lower_ in authors: # todo: ensure author list names are lowercased
+        elif authors and tok.lower_ in authors:  # todo: ensure author list names are lowercased
             message.append('<NAME>')
 
-        else:    
+        else:
             message.append(tok.text)
-    
+
     assert len(message) == len(spaces) == len(doc)
 
     if detokenize:
@@ -89,15 +95,17 @@ def mask_entity_tokens(doc, authors=[], detokenize=False):
     else:
         return ' '.join(message)
 
+
 def chunker(iterable, total_length, chunksize):
     return (iterable[pos: pos + chunksize] for pos in range(0, total_length, chunksize))
 
+
 def flatten(list_of_lists):
-    "Flatten a list of lists to a combined list"
+    """Flatten a list of lists to a combined list."""
     return [item for sublist in list_of_lists for item in sublist]
 
+
 def process_df(df, col):
-    
     batch_gen = (
         (r[col], r['review_author'].split() + r['response_author'].split()) for _, r in df.iterrows())
 
@@ -105,15 +113,18 @@ def process_df(df, col):
 
     for doc, auths in nlp.pipe(batch_gen, as_tuples=True, batch_size=1000):
         processed_texts.append(mask_entity_tokens(doc, auths))
-    
+
     return processed_texts
 
-if __name__ == '__main__':
+
+def main() -> None:
+    global nlp
+
     args = set_args()
 
     nlp = spacy.load(args.spacy_model, disable=["tagger", "parser"])
-    print('loaded spacy model with `tagger` and `parser` disabled for speed ups')
- 
+    logger.info('loaded spacy model with `tagger` and `parser` disabled for speed ups')
+
     if args.tokenized:
         nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
     else:
@@ -121,16 +132,16 @@ if __name__ == '__main__':
         add_special_tokens_to_tokenizer(nlp)
 
     df = pd.read_pickle(args.input)
-    
+
     # replace NA fields with empty string
     df.review_author = df.review_author.fillna('').str.lower()
     df.response_author = df.response_author.fillna('').str.lower()
-    
-    print(f'loaded dataframe from {args.input}')
+
+    logger.info('loaded dataframe from %s', args.input)
 
     # setup output file
     if not args.output:
-        print(f'[!] {args.input} will be updated in place')
+        logger.info('[!] %s will be updated in place', args.input)
         outfile = args.input
     else:
         outfile = args.output
@@ -139,10 +150,7 @@ if __name__ == '__main__':
 
     chunksize = 1000
     for col in args.columns:
-        print(f'processing column `{col}` in {args.input}')
-
-        # no parallel processing
-        # df[col] = process_df(df, col)
+        logger.info('processing column `%s` in %s', col, args.input)
 
         # in parallel:
         # process texts
@@ -159,6 +167,9 @@ if __name__ == '__main__':
     df.response_author = df.response_author.replace(r'^\s*$', np.nan, regex=True)
 
     df.to_pickle(outfile)
-    print(f'saved updated dataframe to {outfile}')
-    
+    logger.info('saved updated dataframe to %s', outfile)
 
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    main()

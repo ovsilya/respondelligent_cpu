@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
+#
+# Prepend mBART control labels (lang tag, domain, establishment, rating) to the
+# review/response files produced by generate_mbart_inputs.py.
+#
+# Usage: prepend_labels.sh [DIR]
+#   DIR  directory containing the split files (default: the value below).
 
-dir=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart/
+dir=${1:-/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart/}
 
 paste -d' ' $dir/train.lang_tags $dir/train.domain $dir/train.est_label $dir/train.rating $dir/train.review > $dir/train.review_tagged
 

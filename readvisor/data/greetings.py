@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-# -*- encoding: utf8 -*-
+
+"""Flair-based masking of greetings and salutations in review responses."""
 
 from typing import List, Tuple
+
 from flair.data import Sentence
 from flair.models import SequenceTagger
 
-from .text_cleaning_utils import reverse_tokenization
+from readvisor.data.text_cleaning import reverse_tokenization
+
 
 def convert_bio_labeled_seq_to_masked_string(seq: List[Tuple]) -> str:
     """
