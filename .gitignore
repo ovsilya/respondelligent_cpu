@@ -1,28 +1,55 @@
-# large files (to be sent separately)
+# --- Byte-compiled / cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+Untitled.ipynb
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+.python-version
+
+# --- Packaging / build ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Tooling caches ---
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# --- Model artifacts & large data (shipped separately — see README) ---
 models/
 classifiers/
 models.tar.gz
-
-tmp/
-__pycache__/
-*.pyc
-Untitled.ipynb
-*/.ipynb_checkpoints/
-.ipynb_checkpoints/
+*.ckpt
+*.pt
+*.bin
 wandb/
+tmp/
 decode.log/
+data/latest_training_files_mbart/train.*
+data/latest_training_files_mbart/valid.*
+data/latest_training_files_mbart/test.*
+data/latest_training_files_mbart/inference/*
+data/latest_training_files_mbart/ft/*
+data/latest_training_files_mbart/csv/*
+data/latest_training_files_mbart/mbart_model_2022-02-18/pytorch_model.bin
+data/latest_training_files_mbart/checkpoint_24.ckpt
+data/latest_training_files_mbart/pytorch_model.bin
+data/old_tannon_training_files_mbart/*
 
-/data_prep/models/*
-/evaluation/models/*
-/data/latest_training_files_mbart/train.*
-/data/latest_training_files_mbart/valid.*
-/data/latest_training_files_mbart/test.*
-/data/latest_training_files_mbart/inference/*
-/data/latest_training_files_mbart/ft/*
-/data/latest_training_files_mbart/csv/*
-/data/latest_training_files_mbart/mbart_model_2022-02-18/pytorch_model.bin
-/data/old_tannon_training_files_mbart/*
-/data/latest_training_files_mbart/checkpoint_24.ckpt
-/data/latest_training_files_mbart/pytorch_model.bin
-/models/
+# --- macOS / editor junk ---
+.DS_Store
+._*
+.idea/
+.vscode/
 
+# --- Logs & local env ---
+*.log
+.env
