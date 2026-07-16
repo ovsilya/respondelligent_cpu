@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 #
-# NOTE: adjust paths below to system before running
-#
-# Example call:
-# nohup bash run_finetuning 4 > logs/finetuning.log &
+# NOTE: adjust the paths below to your system before running.
+# Run this script from the repository root so that the
+# `readvisor.model.*` modules are importable, e.g.:
+# nohup bash readvisor/model/scripts/run_finetuning.sh 4 > logs/finetuning.log &
 #
 
 set -e
 
 GPU=$1
+# --- paths to adjust (placeholders, not real locations) ---
 scratch==/home/ovsyannikovilyavl/respondelligent/rg/fastapi_app/app/models/mbart/response_generator
 data=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart/
 pretrained=$data/mbart_model_2022-02-18/
@@ -39,7 +40,7 @@ echo "Fine-tuning output dir: $outdir/$save_pref"
 
 set -x # to log experiment execution
 
-python train.py \
+python -m readvisor.model.train \
 --from_pretrained $pretrained \
 --tokenizer $pretrained \
 --save_dir $outdir \

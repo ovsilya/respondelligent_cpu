@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 
@@ -17,33 +16,40 @@ Date: 04/06/2021
 
 """
 
-import os
 import argparse
-import random
-import numpy as np
-
-import torch
-from torch.utils.data import DataLoader, Dataset
-from rouge_score import rouge_scorer
-import sacrebleu
-
-import pytorch_lightning as pl
-from pytorch_lightning.loggers import TestTubeLogger, WandbLogger
-from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.overrides.data_parallel import LightningDistributedDataParallel
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-
 import logging
-from transformers import MBartTokenizer, MBartForConditionalGeneration, MBartConfig
-from transformers.models.mbart.modeling_mbart import shift_tokens_right
+import os
+import random
+
 import datasets
+import numpy as np
+import pytorch_lightning as pl
+import sacrebleu
+import torch
+from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.loggers import TestTubeLogger, WandbLogger
+from pytorch_lightning.overrides.data_parallel import LightningDistributedDataParallel
+from rouge_score import rouge_scorer
+from torch.utils.data import DataLoader, Dataset
+from transformers import MBartConfig, MBartForConditionalGeneration, MBartTokenizer
+from transformers.models.mbart.modeling_mbart import shift_tokens_right
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def label_smoothed_nll_loss(lprobs, target, epsilon, ignore_index=-100):
-    """From fairseq"""
+def label_smoothed_nll_loss(
+    lprobs: torch.Tensor,
+    target: torch.Tensor,
+    epsilon: float,
+    ignore_index: int = -100,
+) -> tuple:
+    """Compute label-smoothed negative log-likelihood loss (adapted from fairseq).
+
+    Returns a ``(loss, nll_loss)`` tuple where ``loss`` mixes the NLL loss with a
+    uniform smoothing term weighted by ``epsilon``.
+    """
     if target.dim() == lprobs.dim() - 1:
         target = target.unsqueeze(-1)
     nll_loss = -lprobs.gather(dim=-1, index=target)
@@ -64,17 +70,25 @@ def label_smoothed_nll_loss(lprobs, target, epsilon, ignore_index=-100):
     loss = (1.0 - epsilon) * nll_loss + eps_i * smooth_loss
     return loss, nll_loss
 
-def prepare_input(input_ids, pad_token_id):
+def prepare_input(input_ids: torch.Tensor, pad_token_id: int) -> tuple:
+    """Build the attention mask for ``input_ids``, masking out padding positions.
+
+    Returns the (unchanged) ``input_ids`` alongside a ``long`` attention mask.
+    """
     attention_mask = torch.ones(input_ids.shape, dtype=torch.long, device=input_ids.device)
     attention_mask[input_ids == pad_token_id] = 0
     return input_ids, attention_mask
 
-def get_eval_scores(ref, generated_strs, tags_included=False, vloss=None):
+def get_eval_scores(ref, generated_strs, tags_included: bool = False, vloss=None) -> dict:
+    """Compute ROUGE and BLEU scores comparing references to generated strings.
+
+    When ``tags_included`` is set, the leading language tag is stripped from each
+    reference. Returns a dict of per-metric tensors plus the decoded predictions.
+    """
     if vloss is None:
         vloss = torch.zeros(len(ref))
     if tags_included:
         # remove tags from target text
-        # print(gold_strs)
         gold_strs = [' '.join(r.split(' ')[1:]) for r in ref]
     scorer = rouge_scorer.RougeScorer(rouge_types=['rouge1', 'rouge2', 'rougeL', 'rougeLsum'], use_stemmer=False)
     rouge1 = rouge2 = rougel = rougelsum = 0.0
@@ -149,6 +163,8 @@ class Simplifier(pl.LightningModule):
         self.src_lang = self.args.src_lang
         self.tgt_lang = self.args.tgt_lang
         self.tags_included = self.args.tags_included
+        # FIXME: references bare global `args` instead of `self.args.resume_ckpt`
+        # (suspected bug, left unchanged pending runtime verification).
         if self.args.from_pretrained is not None or args.resume_ckpt is not None: ## TODO check if this is true with resume_ckpt
             self._set_config()
             self._load_pretrained()
@@ -174,11 +190,8 @@ class Simplifier(pl.LightningModule):
         self.config.dropout = self.args.dropout
         self.config.activation_dropout = self.args.activation_dropout
         self.config.gradient_checkpointing = self.args.grad_ckpt
-        # self.config.attention_mode = self.args.attention_mode
-        # self.config.attention_window = [self.args.attention_window] * self.config.encoder_layers
 
     def forward(self, input_ids, output_ids):
-        # breakpoint()
         input_ids, attention_mask = prepare_input(input_ids, self.tokenizer.pad_token_id)
         decoder_input_ids = shift_tokens_right(output_ids, self.config.pad_token_id) # (in: output_ids, eos_token_id, tgt_lang_id out: tgt_lang_id, output_ids, eos_token_id)
         labels = decoder_input_ids[:, 1:].clone()
@@ -207,11 +220,6 @@ class Simplifier(pl.LightningModule):
     def training_step(self, batch, batch_nb):
         output = self.forward(*batch)
         loss = output[0]
-        lr = loss.new_zeros(1) + self.trainer.optimizers[0].param_groups[0]['lr']
-        tensorboard_logs = {'train_loss': loss, 'lr': lr,
-                            'input_size': batch[0].numel(),
-                            'output_size': batch[1].numel(),
-                            'mem': torch.cuda.memory_allocated(loss.device) / 1024 ** 3 if torch.cuda.is_available() else 0}
         self.log('train-loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=False)
         return loss
 
@@ -242,6 +250,9 @@ class Simplifier(pl.LightningModule):
         # get scores as dict
         scores = get_eval_scores(gold_str, generated_str, self.tags_included, vloss)
         
+        # FIXME: references bare global `args.save_prefix` instead of
+        # `self.args.save_prefix` (suspected bug, left unchanged pending
+        # runtime verification).
         outfile = self.args.save_dir + "/" + args.save_prefix + "/_val_out_checkpoint_" + str(self.current_checkpoint)
 
         with open(outfile, 'a') as f:
@@ -269,18 +280,18 @@ class Simplifier(pl.LightningModule):
                 metric /= self.trainer.world_size
             metrics.append(metric)
         logs = dict(zip(*[names, metrics]))
-        print("Evaluation on checkpoint [{}] ".format(self.current_checkpoint))
-        print(logs)
-        
+        logger.info(f"Evaluation on checkpoint [{self.current_checkpoint}] ")
+        logger.info(logs)
+
         ## save metric value + number of checkpoint if best
         if self.args.early_stopping_metric == 'vloss' and logs['vloss'] < self.best_metric:
             self.best_metric = logs['vloss']
             self.best_checkpoint = self.current_checkpoint
-            print("New best checkpoint {}, with {} {}.".format(self.best_checkpoint, self.best_metric, self.args.early_stopping_metric))
+            logger.info(f"New best checkpoint {self.best_checkpoint}, with {self.best_metric} {self.args.early_stopping_metric}.")
         elif logs[self.args.early_stopping_metric] > self.best_metric:
             self.best_metric = logs[self.args.early_stopping_metric]
             self.best_checkpoint = self.current_checkpoint
-            print("New best checkpoint {}, with {} {}.".format(self.best_checkpoint, self.best_metric, self.args.early_stopping_metric))
+            logger.info(f"New best checkpoint {self.best_checkpoint}, with {self.best_metric} {self.args.early_stopping_metric}.")
         self.current_checkpoint +=1
         
 
@@ -289,7 +300,7 @@ class Simplifier(pl.LightningModule):
 
     def test_epoch_end(self, outputs):
         result = self.validation_epoch_end(outputs)
-        print(result)
+        logger.info(result)
         
     def configure_optimizers(self):
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.args.lr)
@@ -304,6 +315,9 @@ class Simplifier(pl.LightningModule):
         if current_dataloader is not None:
             return current_dataloader
        
+        # FIXME: `tags_included=args.tags_included` references the bare global
+        # `args` instead of `self.args.tags_included` (suspected bug, left
+        # unchanged pending runtime verification).
         dataset = SimplificationDataset(inputs=self.datasets[split_name + "_source"], labels=self.datasets[split_name + "_target"] , name=split_name, tokenizer=self.tokenizer,
                                        max_input_len=self.args.max_input_len, max_output_len=self.args.max_output_len, src_lang=self.src_lang, tgt_lang=self.tgt_lang, tags_included=args.tags_included)
       
@@ -367,13 +381,9 @@ class Simplifier(pl.LightningModule):
         parser.add_argument("--attention_dropout", type=float, default=0.1, help="attention dropout")
         parser.add_argument("--dropout", type=float, default=0.1, help="dropout")
         parser.add_argument("--activation_dropout", type=float, default=0.0, help="activation_dropout")
-        # parser.add_argument("--attention_mode", type=str, default='sliding_chunks', help="Longformer attention mode")
-        # parser.add_argument("--attention_window", type=int, default=512, help="Attention window")
         parser.add_argument("--label_smoothing", type=float, default=0.0, required=False)
-        # parser.add_argument("--global_attention_indices", type=int, nargs='+', default=[-1], required=False, help="List of indices of positions with global attention for longformer attention. Supports negative indices (-1 == last non-padding token). Default: [-1] == last source token (==lang_id) .")
-        
+
         # Optimization params:
-        #parser.add_argument("--warmup", type=int, default=1000, help="Number of warmup steps")
         parser.add_argument("--lr", type=float, default=0.00003, help="Initial learning rate")
         parser.add_argument("--val_every", type=float, default=1.0, help="Number of training steps between validations in percent of an epoch.")
         parser.add_argument("--val_percent_check", default=1.00, type=float, help='Percent of validation data used')
@@ -402,7 +412,8 @@ class Simplifier(pl.LightningModule):
         return parser
 
 
-def main(args):
+def main(args: argparse.Namespace) -> None:
+    """Fine-tune the mBART simplifier according to the parsed CLI ``args``."""
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -421,23 +432,22 @@ def main(args):
     model.datasets = datasets.load_dataset('text', data_files={'train_source': args.train_source, 'train_target': args.train_target, 'val_source': args.val_source, 'val_target': args.val_target, 'test_source': args.test_source, 'test_target': args.test_target })
 
     if args.wandb:
-        logger = WandbLogger(project=args.wandb)
+        pl_logger = WandbLogger(project=args.wandb)
     else:
-        logger = TestTubeLogger(
+        pl_logger = TestTubeLogger(
             save_dir=args.save_dir,
             name=args.save_prefix,
             version=0  # always use version=0
         )
 
-    print(args)
+    logger.info(args)
 
     model.lr_mode='max'
-    # if args.early_stopping_metric == 'val_loss':
     if args.early_stopping_metric == 'vloss':
         model.lr_mode='min'
     early_stop_callback = EarlyStopping(monitor=args.early_stopping_metric, min_delta=0.00, patience=args.patience, verbose=True, mode=model.lr_mode) # metrics: val_loss, bleu, rougeL
-    
-    custom_checkpoint_path = "checkpoint{{epoch:02d}}_{{{}".format(args.early_stopping_metric )
+
+    custom_checkpoint_path = f"checkpoint{{epoch:02d}}_{{{args.early_stopping_metric}"
     custom_checkpoint_path += ':.5f}'
   
     checkpoint_callback = ModelCheckpoint(
@@ -460,7 +470,7 @@ def main(args):
                          check_val_every_n_epoch=1 if not (args.debug) else 1,
                          limit_val_batches=args.val_percent_check,
                          limit_test_batches=args.test_percent_check,
-                         logger=logger,
+                         logger=pl_logger,
                          checkpoint_callback=checkpoint_callback if not args.disable_checkpointing else False,
                          progress_bar_refresh_rate=args.progress_bar_refresh_rate,
                          precision=32 if args.fp32 else 16, amp_level='O2',
@@ -471,7 +481,7 @@ def main(args):
     model.model.save_pretrained(args.save_dir + "/" + args.save_prefix)
     model.tokenizer.save_pretrained(args.save_dir + "/" + args.save_prefix)
     trainer.fit(model)
-    print("Training ended. Best checkpoint {} with {} {}.".format(model.best_checkpoint, model.best_metric, args.early_stopping_metric))
+    logger.info(f"Training ended. Best checkpoint {model.best_checkpoint} with {model.best_metric} {args.early_stopping_metric}.")
     trainer.test(model)
 
 

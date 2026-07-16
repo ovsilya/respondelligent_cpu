@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 
 #
-# NOTE: adjust paths below to system before running
-#
-# Example call:
-# bash run_mbart_conversion.sh
+# NOTE: adjust the paths below to your system before running.
+# Run this script from the repository root so that the
+# `readvisor.model.*` modules are importable, e.g.:
+# bash readvisor/model/scripts/run_mbart_conversion.sh
 #
 
 set -e
 
+# --- paths to adjust (placeholders, not real locations) ---
 scratch=/home/ovsyannikovilyavl/respondelligent/rg/fastapi_app/app/models/mbart/response_generator
 data=/home/ovsyannikovilyavl/respondelligent/rg/data/latest_training_files_mbart
 
@@ -17,7 +18,7 @@ spm_pieces="$data/spm_pieces.txt"
 spec_tokens="$data/special_tokens.txt"
 
 # collect list-of-spm-pieces
-python collect_list_of_spm_pieces.py \
+python -m readvisor.model.collect_spm_pieces \
     $data/train.review $data/train.response \
     $data/valid.review $data/valid.response \
     --spm $scratch/sentencepiece.bpe-2.model \
@@ -25,7 +26,7 @@ python collect_list_of_spm_pieces.py \
 
 echo "saved spm pieces to $spm_pieces"
 
-python collect_list_of_special_tokens.py \
+python -m readvisor.model.collect_special_tokens \
     $data/train.review $data/train.response \
     $data/train.rating $data/train.domain $data/train.est_label \
     $data/valid.rating $data/valid.domain $data/valid.est_label \
@@ -43,7 +44,7 @@ echo "output path for trimmed mBART model: $outdir"
 
 echo "trimming mBART's embedding matrix..."
 
-python trim_mbart.py \
+python -m readvisor.model.trim_mbart \
     --base_model facebook/mbart-large-cc25 \
     --save_model_to $outdir \
     --reduce-to-vocab $spm_pieces \

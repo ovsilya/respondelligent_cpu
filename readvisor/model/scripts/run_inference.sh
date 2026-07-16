@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 #
-# NOTE: adjust paths below to system before running
-#
-# Example call:
-# bash run_inference.sh 1
+# NOTE: adjust the paths below to your system before running.
+# Run this script from the repository root so that the
+# `readvisor.model.*` modules are importable, e.g.:
+# bash readvisor/model/scripts/run_inference.sh 1
 #
 
 set -e
 
 GPU=$0
+# --- paths to adjust (placeholders, not real locations) ---
 scratch=/srv/scratch6/kew/mbart/hospo_respo/respo_final/
 
 # data=$scratch/data/ # regular test set (2020)
@@ -33,7 +34,7 @@ mkdir -p $outdir
 
 set -x
 
-python inference.py \
+python -m readvisor.model.inference \
     --model_path $finetuned \
     --checkpoint $model_checkpoint \
     --tokenizer $finetuned \

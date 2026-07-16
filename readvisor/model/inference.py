@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 
@@ -17,25 +16,21 @@ Date: 04/06/2021
 
 """
 
-import os
 import argparse
-import numpy as np
 import json
-import re
-from pathlib import Path
 import logging
+import os
+from pathlib import Path
 
-import torch
-from torch.utils.data import DataLoader, Dataset
-
+import datasets
 import pytorch_lightning as pl
+import torch
 from pytorch_lightning.loggers import TestTubeLogger
 from pytorch_lightning.overrides.data_parallel import LightningDistributedDataParallel
+from torch.utils.data import DataLoader, Dataset
+from transformers import MBartConfig, MBartForConditionalGeneration, MBartTokenizer
 
-from transformers import MBartTokenizer, MBartForConditionalGeneration, MBartConfig
-import datasets
-
-from .train import prepare_input, get_eval_scores
+from readvisor.model.train import get_eval_scores, prepare_input
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -214,8 +209,8 @@ class InferenceSimplifier(pl.LightningModule):
                 metric = sum(scores)/len(scores)
                 metrics.append(metric)
             logs = dict(zip(*[names, metrics]))
-            print("Evaluation on provided reference [{}] ".format(self.args.test_target))
-            print(logs)
+            logger.info(f"Evaluation on provided reference [{self.args.test_target}] ")
+            logger.info(logs)
 
     def forward(self):
         pass
@@ -227,7 +222,7 @@ class InferenceSimplifier(pl.LightningModule):
         if self.args.test_target is not None:
             reference = self.datasets[split_name + "_target"]
         target_tags = None
-        if reference == None:
+        if reference is None:
             if self.args.target_tags is not None:
                 target_tags = self.datasets["target_tags"]
             elif self.args.infer_target_tags:
@@ -288,7 +283,6 @@ class InferenceSimplifier(pl.LightningModule):
         parser.add_argument("--translation", type=str, default='decoded.out', help="Output file to write decoded sequence to.")
         parser.add_argument("--beam_size", type=int, default=4, help="Beam size for inference when testing/validating. Default: 4.")
         parser.add_argument("--test_percent_check", default=1.00, type=float, help='Percent of test data used')
-        # parser.add_argument("--global_attention_indices", type=int, nargs='+', default=[-1], required=False, help="List of indices of positions with global attention for longformer attention. Supports negative indices (-1 == last non-padding token). Default: [-1] == last source token (==lang_id) .")
 
         parser.add_argument("--output_to_json", default=False, action="store_true", help='If true, decoding output is a verbose JSONL containing, src, tgt, and scored model output hyps')
         
@@ -311,10 +305,10 @@ class InferenceSimplifier(pl.LightningModule):
         return parser
 
 
-def main(args):
-
+def main(args: argparse.Namespace) -> None:
+    """Run inference with a fine-tuned mBART model according to the CLI ``args``."""
     if Path(args.translation).is_file():
-        logging.info("Output file `{}` already exists and will be overwritten...".format(args.translation))
+        logger.info(f"Output file `{args.translation}` already exists and will be overwritten...")
         Path(args.translation).unlink()
 
     checkpoint_path=os.path.join(args.model_path, args.checkpoint_name)
@@ -352,7 +346,7 @@ def main(args):
         else:
             simplifier.datasets = datasets.load_dataset('text', data_files={'test_source': args.test_source })
 
-    logger = TestTubeLogger(
+    pl_logger = TestTubeLogger(
         save_dir=".",
         name="decode.log",
         version=0  # always use version=0
@@ -361,14 +355,14 @@ def main(args):
     trainer = pl.Trainer(gpus=args.gpus, distributed_backend='ddp' if torch.cuda.is_available() else None,
                          replace_sampler_ddp=False,
                          limit_test_batches=args.test_percent_check,
-                         logger=logger,
+                         logger=pl_logger,
                          progress_bar_refresh_rate=args.progress_bar_refresh_rate,
                          precision=32 if args.fp32 else 16, amp_level='O2'
                          )
     
     trainer.test(simplifier)
-    
-    print("Decoded outputs written to {}".format(args.translation))
+
+    logger.info(f"Decoded outputs written to {args.translation}")
         
 
 if __name__ == "__main__":

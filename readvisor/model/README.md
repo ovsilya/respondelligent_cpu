@@ -40,10 +40,10 @@ example call provided in each script.
 
 ### Model setup
 
-To trim the embedding matrix of the huggingface mBART model, use `trim_mbart.py`, for example:
+To trim the embedding matrix of the huggingface mBART model, use `trim_mbart.py`, for example (run from the repository root):
    
    ``` 
-   python trim_mbart.py \
+   python -m readvisor.model.trim_mbart \
     --base_model facebook/mbart-large-cc25 \
     --save_model_to path-to-save-new-model \
     --reduce-to-vocab list-of-spm-pieces \
@@ -72,7 +72,7 @@ TGT=target-suffix
 
 mkdir $pretrained/ft/name-of-model/
 
-python train.py \
+python -m readvisor.model.train \
 --from_pretrained $pretrained \
 --tokenizer $pretrained \
 --save_dir $pretrained/ft \
@@ -108,9 +108,9 @@ In a setting where translating from A to B, set `--src_lang A` and `--tgt_lang B
 
 ### Inference
 
-To run inference with a fine-tuned model, use `inference.py`, for example like this:
+To run inference with a fine-tuned model, use `inference.py`, for example like this (run from the repository root):
 ```
-python inference.py \
+python -m readvisor.model.inference \
 --model_path path-to-fine-tuned-model \
 --checkpoint "checkpointepoch=name-of-checkpoint" \
 --tokenizer path-to-fine-tuned-model \

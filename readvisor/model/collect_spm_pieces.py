@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-# TODO: prepare corpus file
-# use mBART spm model
-# /srv/scratch6/kew/mbart/mbart.cc25.v2/sentence.bpe.model
-# to check which tokens are to be kept
-# write keep-tokens to outputfile
+"""Collect sentencepiece pieces shared between corpus files and an mBART spm model.
 
-"""
+Encodes each corpus file with the provided sentencepiece model, counts the
+resulting pieces, adds the mBART language tags, and writes the vocabulary to an
+output file (one piece per line, ordered by frequency).
 
 Example call:
 
-    python collect_list_of_spm_pieces.py /srv/scratch6/kew/mbart/dummy_de/raw/train.review /srv/scratch6/kew/mbart/dummy_de/raw/train.response --spm ../hf4mbart/sentencepiece.bpe.model --outfile /srv/scratch6/kew/mbart/dummy_de/vocab.txt
-
+    python -m readvisor.model.collect_spm_pieces \\
+        $data/train.review $data/train.response \\
+        --spm sentencepiece.bpe.model --outfile $data/vocab.txt
 """
 
 import argparse
+import logging
 from collections import Counter
 from typing import List
+
 import sentencepiece as sp
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
 
 def set_args():
     ap = argparse.ArgumentParser()
@@ -32,16 +36,16 @@ def collect_pieces(infiles: List[str], spm: sp.SentencePieceProcessor):
     relevant_pieces = Counter()
 
     for infile in infiles:
-        print(f'reading pieces from file {infile} ...')
-        with open(infile, 'r', encoding='utf8') as inf:
+        logger.info('reading pieces from file %s ...', infile)
+        with open(infile, encoding='utf8') as inf:
             for line in inf:
                 line = line.strip()
                 pieces = spm.encode_as_pieces(line)
                 relevant_pieces.update(pieces)
 
-    print(f'collected {len(relevant_pieces)} pieces')
+    logger.info('collected %s pieces', len(relevant_pieces))
 
-    return relevant_pieces    
+    return relevant_pieces
 
 def write_vocab_file(pieces, outfile):
 
@@ -56,7 +60,7 @@ if __name__ == "__main__":
 
     # load spm:
     spm = sp.SentencePieceProcessor(model_file=args.spm)
-    print(f'loaded sentencepiece model from {args.spm}')
+    logger.info('loaded sentencepiece model from %s', args.spm)
     # collect overlapping sentencepiece tokens from corpus/spm
     relevant_pieces = collect_pieces(args.corpus_files, spm)
 
