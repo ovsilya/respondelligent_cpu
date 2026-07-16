@@ -1,0 +1,7 @@
+# Run from the repo root so the build context contains pyproject.toml + readvisor/.
+steps:
+- name: gcr.io/cloud-builders/docker
+  args: [ build, -t, gcr.io/$PROJECT_ID/readvisor-serving, -f, readvisor/serving/Dockerfile, . ]
+
+images:
+- gcr.io/$PROJECT_ID/readvisor-serving

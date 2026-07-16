@@ -12,10 +12,11 @@ In order to run successfully, make sure that:
 
 ## Docker
 
-To build the docker image, from this directory, run:
+To build the docker image, from the **repo root** (so `pyproject.toml` and the
+`readvisor/` package are in the build context), run:
 
 ```
-docker build -m 14g -t respogen .
+docker build -m 14g -f readvisor/serving/Dockerfile -t respogen .
 ```
 
 where `respogen` is the name of the container
@@ -38,11 +39,19 @@ docker run -p 8000:8000 rrgen_model1_de
 
 ## App
 
-The entry point to the app is `fastapi_app/main.py` and can
-be launched using
+The entry point to the app is `readvisor/serving/main.py`. It can be launched
+either as an importable ASGI app via uvicorn:
 
 ```
-python fastapi_app/main.py fastapi_app/config.json
+uvicorn readvisor.serving.main:app --host 0.0.0.0 --port 8000
+```
+
+or directly, optionally passing a config path (argv overrides the
+`READVISOR_CONFIG` env var, which overrides the packaged
+`readvisor/serving/config.json` default):
+
+```
+python -m readvisor.serving.main readvisor/serving/config.json
 ```
 
 ## Model inference
@@ -66,9 +75,10 @@ python fastapi_app/main.py fastapi_app/config.json
 		"salutations": ["Besten Dank, Hanspeter, Team Leader.", "Mit freundlichen Grüssen, Hotel du Commerce."]
 	}
 }
-To demo model inference, use `generate.py`, for example:
+To demo model inference, use `generation.py` (runs the packaged
+`egs/demo_reviews.json` payload), for example:
 ```
-python app/src/generate.py \
+python -m readvisor.serving.generation \
     --model_path /srv/scratch6/kew/mbart/hospo_respo/ml_hosp_re_unmasked_untok/2021-04-30_12-40-05_w128-2021 \
     --checkpoint "/srv/scratch6/kew/mbart/hospo_respo/ml_hosp_re_unmasked_untok/2021-04-30_12-40-05_w128-2021/checkpointepoch=19_vloss=3.54154.ckpt" \
     --tokenizer /srv/scratch6/kew/mbart/hospo_respo/ml_hosp_re_unmasked_untok/2021-04-30_12-40-05_w128-2021/ \
