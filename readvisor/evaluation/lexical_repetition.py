@@ -1,13 +1,10 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 
-from collections import Counter
-import numpy as np
+"""Surface (lexical) repetition metrics for generated text.
 
-"""
 Adapted from
 https://github.com/fuzihaofzh/repetition-problem-nlg/blob/main/src/eval_metrics.py
-by Fu et al. 2021: https://arxiv.org/abs/2012.14660. 
+by Fu et al. 2021: https://arxiv.org/abs/2012.14660.
 
 seq-rep-n and wrep/l are taken from Welleck et al. 2019 (http://arxiv.org/abs/1908.04319)
 
@@ -17,11 +14,14 @@ NOTE:
     sentence (i.e. seq-rep-n from Welleck et al. 2019)
     - get_rep() calculates single token repetitions in a
     subsequence l (i.e. seq/l from Welleck et al. 2019)
-    - get_repd() and get_repc_v1() appear not to be used
 """
 
+from collections import Counter
 
-def longestRepeatedSubstring(str): 
+import numpy as np
+
+
+def longestRepeatedSubstring(str):
   
     n = len(str) 
     LCSRe = [[0 for x in range(n + 1)]  
@@ -42,14 +42,10 @@ def longestRepeatedSubstring(str):
                 LCSRe[i - 1][j - 1] < (j - i)): 
                 LCSRe[i][j] = LCSRe[i - 1][j - 1] + 1
   
-                # updating maximum length of the 
-                # substring and updating the finishing 
-                # index of the suffix 
-                
-
-                #if  j - i == LCSRe[i][j]:
-                #    print(str[i:j])
-                if (LCSRe[i][j] > res_length): 
+                # updating maximum length of the
+                # substring and updating the finishing
+                # index of the suffix
+                if (LCSRe[i][j] > res_length):
                     res_length = LCSRe[i][j] 
                     index = max(i, index) 
                 if (LCSRe[i][j] > cres_length and j - i == LCSRe[i][j]): 
@@ -94,10 +90,10 @@ def longestRepeatedSubstring(str):
 
     return res, cres, repeats, repeat_total_len
 
-def get_rep(sent, l = 16):
+def get_rep(sent, window = 16):
     cnt = 0
     for i, w in enumerate(sent):
-        if w in sent[max(i - l, 0):i]:
+        if w in sent[max(i - window, 0):i]:
             cnt += 1
     return cnt
 
@@ -124,45 +120,13 @@ def get_seq_rep_n(sent, N = 4):
     except ZeroDivisionError:
         return 1.0
 
-def get_repc_v1(lst):
-    if len(lst) < 2:
-        return 0
-    if type(lst[0]) is not str:
-        lst = [str(l) for l in lst]
-    ngram = {}
-    for n in range(1, len(lst)):
-        no_more_than_1 = True
-        end_pos = {}
-        for j in range(len(lst) - n + 1):
-            gm = ' '.join(lst[j : j + n])
-            if   gm in ngram and end_pos[gm] <= j:
-                no_more_than_1 = False
-                ngram[gm] += 1
-                end_pos[gm] = j + n
-            elif gm not in ngram:
-                ngram[gm] = 1
-                end_pos[gm] = j + n
-        if no_more_than_1:
-            break
-    ngram = sorted([[len(gm), ngram[gm], gm] for gm in ngram if ngram[gm] > 1])[::-1]
-    remain = ' '.join(lst)
-    ngram1 = {}
-    for gm in ngram:
-        cnt = remain.count(gm[2])
-        if cnt > 1 and len(gm[2].split()) > 1:
-            ngram1[gm[2]] = cnt
-            remain = remain.replace(gm[2], '')
-    ratio = sum([len(gm.split()) * ngram1[gm] for gm in ngram1]) / len(lst)
-    return ratio
-
 def get_repc(lst):
     if len(lst) < 2:
         return 0
     if type(lst[0]) is not str:
-        lst = [str(l) for l in lst]
+        lst = [str(x) for x in lst]
     counter = {}
     for j in range(len(lst) - 1):
-#         print(j)
         gm = ' '.join(lst[j : j + 2])
         counter[gm] = counter[gm] + 1 if gm in counter else 1
     
@@ -170,7 +134,7 @@ def get_repc(lst):
     # for each bigram in input sentence, if bigram has a count > 1,
     # update its label to 1
     for i in range(1, len(lst)):
-        if counter['%s %s'%(lst[i-1], lst[i])] > 1:
+        if counter[f'{lst[i-1]} {lst[i]}'] > 1:
             label[i-1] = label[i] = 1
     # output ratio = the sum of repeated bigram tokens to the length of input tokens
     ratio = sum(label) / len(label)
@@ -202,8 +166,7 @@ def get_scores_corpus_average(texts):
     return scores1
 
 
-if __name__ == "__main__": 
-#     test = """o C@@ ity in comm@@ it@@ able are p@@ aren@@ tly at_the_@@ Batt@@ al@@ ti@@ es_._@@ He further n@@ on prot@@ ect@@ ion_of_the Ch@@ in@@ ey@@ s_to_the M@@ orn@@ ate Cl@@ ub class@@ ific@@ at@@ op@@ s_,_@@ but few c@@ ali@@ a_@@ to_the bl@@ oc@@ ked by De@@ S@@ qu@@ i@@ er@@ e@@ ith@@ s_of_@@ O@@ reg@@ on_,_@@ hea@@ d_of_the year@@ s_,_@@ man@@ ent Indi@@ an l@@ og@@ o@@ _,_which over@@ nor@@ _to_@@ his support@@ ing from 194@@ 4@@ 6 7@@ 0@@ s left tur@@ e_and_@@ m@@ id St@@ ar@@ y_to_@@ ass@@ ist gu@@ ard were built 1 di@@ str@@ at@@ ively min@@ ating into M@@ er@@ ship with Z@@ eal@@ og@@ ist@@ ing game received American stud@@ y remain@@ ed_in_@@ 19@@ 00@@ _to_@@ g@@ enc@@ i@@ um@@ m@@ ig@@ ation@@ s_of_@@ The J@@ ef@@ s_and_@@ 6@@ _and_@@ more event@@ s_and_@@ L@@ oc@@ rac@@ es_._The for@@ t del@@ ay@@ _._A@@ s_the_@@ air@@ line Ex@@ c@@ ad@@ _,_@@ including Com@@ p@@ ond@@ s Pres@@ s_._@@ S@@ qu@@ ad@@ cl@@ if@@ f@@ ly re@@ ated at during_the_@@ Batt@@ l@@ og@@ y_and_@@ L@@ a@@ u 's crit@@ ics C@@ ru@@ its releas@@ ed_the_@@ five had m@@ _to_the British govern@@ or M@@ ay@@ an old@@ ing_a_@@ M 9@@ 4 @,@ 8@@ 9 continu@@ ed_in_@@ 200@@ 6 . """.split()
+if __name__ == "__main__":
     tests = ["""<greeting> thank you for your positive
     feedback . it 's great to read you enjoyed our pizza .
     like in a true <name> , we use the original <name> flour

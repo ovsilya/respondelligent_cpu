@@ -1,14 +1,11 @@
-import random
-import re
-
 import prodigy
 from prodigy.components.loaders import JSONL
-from prodigy.components.preprocess import add_tokens
 
-with open('src/eval_criteria.html', 'r', encoding='utf8') as f:
+# NOTE: reads src/eval_criteria.html + src/script.js relative to the CWD.
+with open('src/eval_criteria.html', encoding='utf8') as f:
     eval_html = f.read()
 
-with open('src/script.js', 'r', encoding='utf8') as f:
+with open('src/script.js', encoding='utf8') as f:
     javascript = f.read()
 
 @prodigy.recipe('rrgen-human-eval-v2-edit')
@@ -24,14 +21,12 @@ def correct_rrgen(dataset, file_path):
 
     def get_stream_helper(stream):
         while True:
-            for task in stream:
-                yield task
+            yield from stream
 
     def get_stream():
         stream = JSONL(file_path)
         tasks = []
         for eg in stream:
-            # print(eg.keys())
             eg["edit_text"] = eg['text']
             tasks.append(eg)            
         return tasks

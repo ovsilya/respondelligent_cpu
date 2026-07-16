@@ -1,11 +1,7 @@
-import random
-import re
-
 import prodigy
+import spacy
 from prodigy.components.loaders import JSONL
 from prodigy.components.preprocess import add_tokens
-
-import spacy
 from spacy.tokenizer import Tokenizer
 
 # NOTE: we just use the en model here since its purpose is
@@ -14,10 +10,11 @@ from spacy.tokenizer import Tokenizer
 nlp = spacy.load('en_core_web_sm')
 nlp.tokenizer = Tokenizer(nlp.vocab)
 
-with open('src/eval_criteria.html', 'r', encoding='utf8') as f:
+# NOTE: reads src/eval_criteria.html + src/script.js relative to the CWD.
+with open('src/eval_criteria.html', encoding='utf8') as f:
     eval_html = f.read()
 
-with open('src/script.js', 'r', encoding='utf8') as f:
+with open('src/script.js', encoding='utf8') as f:
     javascript = f.read()
 
 @prodigy.recipe('rrgen-human-eval-v1-highlight')
@@ -25,8 +22,7 @@ def multi_eval_rrgen(dataset, file_path):
 
     def get_stream(stream):
         while True:
-            for task in stream:
-                yield task
+            yield from stream
 
     stream = JSONL(file_path)
     # NOTE: converting from generator to list allows a progress bar for annotator

@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-from typing import List, Dict
+"""Semantic (paraphrase-based) repetition metrics for generated text.
+
+Uses a multilingual sentence-transformer to detect repeated sentences that
+are paraphrases of one another (rather than exact lexical repeats).
+"""
+
+from typing import Dict, List
+
 import numpy as np
-# from tqdm import tqdm
+from nltk import tokenize  # for sentence tokenization
 from scipy import stats
-from nltk import tokenize # for sentence tokenization
 from sentence_transformers import SentenceTransformer, util
-# note, model will be downloaded if not already installed;
-# check in ~/.cache/torch/sentence_transformers/
 
-# model = SentenceTransformer('distiluse-base-multilingual-cased')
-# model = SentenceTransformer('distiluse-base-multilingual-cased-v1')
+# NOTE: model will be downloaded if not already installed;
+# default location = ~/.cache/torch/sentence_transformers/
 model = SentenceTransformer('paraphrase-xlm-r-multilingual-v1')
-# NOTE: default model location = ~/.cache/torch/sentence_transformers
 
 def calculate_paraphrase_ratio(text: str, sim_threshold: float = 0.75, model: SentenceTransformer = model, tokenizer=tokenize) -> float:
     """
@@ -107,4 +109,4 @@ if __name__ == '__main__':
     print('ex 4:', calculate_paraphrase_ratio(ex4))
     print('ex 5:', calculate_paraphrase_ratio(ex5))
     print('ex 6:', calculate_paraphrase_ratio(ex6))
-    print(compute_corpus_average([ex1, ex2, ex3, ex4, ex5, ex6]))
+    print(calculate_paraphrase_ratio_corpus_average([ex1, ex2, ex3, ex4, ex5, ex6]))

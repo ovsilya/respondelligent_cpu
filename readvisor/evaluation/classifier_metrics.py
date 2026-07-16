@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-from typing import List, Dict
-import numpy as np
+"""fastText classifier-based accuracy metrics (domain, rating, source).
+
+Classifies reference and hypothesis texts with pre-trained fastText models
+and reports the accuracy against ground-truth attribute labels.
+"""
+
+import logging
+from typing import Dict, List
+
 import fasttext
-from sklearn.metrics import precision_recall_fscore_support, confusion_matrix
 
-# silence stupid warning message (https://github.com/facebookresearch/fastText/issues/1067)
+logger = logging.getLogger(__name__)
+
+# silence warning message (https://github.com/facebookresearch/fastText/issues/1067)
 fasttext.FastText.eprint = lambda x: None
 
 domain_classifier = './models/classifiers/fasttext/domain_classifier/domain.model.bin'
@@ -49,12 +56,13 @@ def classify_texts(texts: List[str], model_path: str, k: int = 1) -> List[float]
     preds, conf = model.predict(texts, k=k)
     return preds
 
-def compute_accuray(y_true, y_pred):
+def compute_accuracy(y_true, y_pred):
+    """Compute top-k accuracy of classifier predictions against ground truth.
+
+    y_pred is a list of tuples containing the classifier's top-k predictions.
+    NOTE: for review rating, we generalise from a discrete scale to a range
+    ([0,1], [1,2], [2,3], etc.)
     """
-    y_pred is a list of tuples containing classifiers top-k predictions
-    NOTE: for review rating, we generalise from a discrete scale to a range ([0,1], [1,2], [2,3], etc.)
-    """
-#     print(y_pred)
     assert not isinstance(y_pred[0], tuple)
     correct = []
     hit = len(y_pred[0])
@@ -64,23 +72,7 @@ def compute_accuray(y_true, y_pred):
         else:
             correct.append(0)
 
-    # more detailed analysis
-    # y_true = np.array(y_true) 
-    # y_pred = np.array([y[0] for y in y_pred])        
-    # eq = y_true == y_pred
-    # print("CLSFR Accuracy: " + str(eq.sum() / len(y_true)))
-    # cm = confusion_matrix(y_true, y_pred)
-    # print("CLSFR confusion matrix:")
-    # print(cm)
-    # print(precision_recall_fscore_support(y_true, y_pred, average='macro'))
-    # print(precision_recall_fscore_support(y_true, y_pred, average='micro'))
-
     return f'{sum(correct) / len(correct):.3f} @ hit {hit}'
-
-# def read_reference_labels(file):
-#     with open(file, 'r', encoding='utf8') as f:
-#         for line in f:
-#             yield line.strip()
 
 def estimate_domain_accuracy(
     refs: List[str],
@@ -104,14 +96,14 @@ def estimate_domain_accuracy(
                                model_path=model_path,
                                k=1)
     if verbose:
-        print('REFS:', ref_preds[:10], '...')
+        logger.info('REFS: %s ...', ref_preds[:10])
     
     hyp_preds = classify_texts(list(map(lambda x : x.lower(), hyps)),
                                model_path=model_path,
                                k=1)
 
     if verbose:
-        print('HYPS:', hyp_preds[:10], '...')
+        logger.info('HYPS: %s ...', hyp_preds[:10])
 
     if not ground_truth_labels:
         raise RuntimeError('Cannot compute accuracy - missing ground truth labels')
@@ -119,12 +111,12 @@ def estimate_domain_accuracy(
         ground_truth_labels = [domain_mapping[i] for i in ground_truth_labels]
     
     if verbose:
-        print('TRUTH:', ground_truth_labels[:10], '...')
+        logger.info('TRUTH: %s ...', ground_truth_labels[:10])
 
     
     return {
-        'accuracy_on_refs': compute_accuray(ground_truth_labels, ref_preds),
-        'accuracy_on_hyps': compute_accuray(ground_truth_labels, hyp_preds)
+        'accuracy_on_refs': compute_accuracy(ground_truth_labels, ref_preds),
+        'accuracy_on_hyps': compute_accuracy(ground_truth_labels, hyp_preds)
     }
 
 
@@ -143,14 +135,14 @@ def estimate_rating_accuracy(
                                model_path=model_path,
                                k=2)
     if verbose:
-        print('REFS:', ref_preds[:10], '...')
+        logger.info('REFS: %s ...', ref_preds[:10])
     
     hyp_preds = classify_texts(list(map(lambda x : x.lower(), hyps)),
                                model_path=model_path,
                                k=2)
     
     if verbose:
-        print('HYPS:', hyp_preds[:10], '...')
+        logger.info('HYPS: %s ...', hyp_preds[:10])
 
     if not ground_truth_labels:
         raise RuntimeError('Cannot compute accuracy - missing ground truth labels!')
@@ -158,11 +150,11 @@ def estimate_rating_accuracy(
         ground_truth_labels = [ratings_mapping[i] for i in ground_truth_labels]
 
     if verbose:
-        print('TRUTH:', ground_truth_labels[:10], '...')
+        logger.info('TRUTH: %s ...', ground_truth_labels[:10])
 
     return {
-            'accuracy_on_refs': compute_accuray(ground_truth_labels, ref_preds),
-            'accuracy_on_hyps': compute_accuray(ground_truth_labels, hyp_preds)
+            'accuracy_on_refs': compute_accuracy(ground_truth_labels, ref_preds),
+            'accuracy_on_hyps': compute_accuracy(ground_truth_labels, hyp_preds)
         }
 
 
@@ -182,34 +174,36 @@ def estimate_source_accuracy(
                                k=1)
 
     if verbose:
-        print('REFS:', ref_preds[:10], '...')
+        logger.info('REFS: %s ...', ref_preds[:10])
         
     hyp_preds = classify_texts(list(map(lambda x : x.lower(), hyps)),
                                model_path=model_path,
                                k=1)
 
     if verbose:
-        print('HYPS:', hyp_preds[:10], '...')
+        logger.info('HYPS: %s ...', hyp_preds[:10])
 
     if not ground_truth_labels: # assume all as respondelligent!
         ground_truth_labels = ['__label__re'] * len(ref_preds)
     else:
-        # import pdb;pdb.set_trace()
         ground_truth_labels = [source_mappings[i] for i in ground_truth_labels]
 
 
     if verbose:
-         print('TRUTH:', ground_truth_labels[:10], '...')
+         logger.info('TRUTH: %s ...', ground_truth_labels[:10])
             
     return {
-        'accuracy_on_refs': compute_accuray(ground_truth_labels, ref_preds),
-        'accuracy_on_hyps': compute_accuray(ground_truth_labels, hyp_preds)
+        'accuracy_on_refs': compute_accuracy(ground_truth_labels, ref_preds),
+        'accuracy_on_hyps': compute_accuracy(ground_truth_labels, hyp_preds)
         }
 
 
 if __name__ == '__main__':
-    # test
-    model_path = '/srv/scratch2/kew/classifiers/fasttext/domain_classifier/domain.model.bin'
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('model_path', type=str, help='path to a trained fastText classifier model')
+    model_path = ap.parse_args().model_path
 
     ex1 = """<greeting> thank you for your positive \
         feedback . it 's great to read you enjoyed our pizza . \
